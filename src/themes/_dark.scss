@@ -2,56 +2,85 @@
 @use '../tokens';
 @use 'common';
 
-// ui-grid dark theme 기준. ui-grid 에 없는 muted-color / body-bg-deep / button-active-bg 는
-// 다른 dark 값과의 대비를 맞춘 파생 값이므로 실제 화면에서 조정이 필요할 수 있다.
+// 기준은 ui-components / ui-report-studio dark theme(남색 계열)이다.
+// 두 프로젝트에 없는 항목은 아래 규칙으로 채웠다.
+//  - ui-grid / ui-tree 등에서 가져온 값 : 출처 표기
+//  - 남색 바탕과 어울리도록 새로 정한 값 : "파생" 표기 (실제 화면에서 검토 필요)
 $theme: map.merge(
   common.$theme-common,
   (
-    font-color: tokens.$dark-100,
-    font-hover-color: tokens.$white,
-    font-disable-color: tokens.$gray-200,
-    muted-color: #9aa1ab,
-    border-color: tokens.$dark-400,
-    border-thick-color: #807e7e,
-    body-bg: tokens.$dark-900,
-    body-bg-thin: tokens.$dark-500,
-    body-bg-deep: #111111,
-    body-bg-hover: #565555,
-    disabled-bg: #555555,
+    // ---- 글자 ----
+    font-color: #dddddd,
+    label-color: #c5ccd6,
+    font-hover-color: tokens.$white, // 파생
+    font-disable-color: #6b7482, // components disabled-color
+    muted-color: #8d96a3,
+    // ---- 테두리 ----
+    border-color: #3a4456,
+    border-thick-color: #807e7e, // ui-grid (입력 요소 hover 테두리)
+    border-light-color: #3a4456,
+    divider-color: #4a5466,
+    // ---- 배경 ----
+    body-bg: #1f2836,
+    body-bg-thin: #273244, // 파생 (report-studio table-header-bg)
+    body-bg-deep: #2f3b4f, // 파생. 깊을수록 밝아지는 ui-role-builder 중첩 규칙을 유지하기 위해 body-bg-thin(#273244) 보다 밝게
+    body-bg-hover: #2f3b4f, // 파생 (hover-bg 와 동일)
+    disabled-bg: #555555, // components input-disabled-bg
+    panel-header-bg: #18202c, // report-studio
+    // ---- 입력 요소 (ui-grid 값. 두 프로젝트도 동일하게 사용) ----
     input-bg: tokens.$dark-800,
     input-color: #f0f0f0,
     input-border-color: tokens.$dark-400,
     input-border-hover-color: #807e7e,
     input-disabled-bg: #555555,
-    button-bg: #5a5a5a,
-    button-hover-bg: tokens.$dark-300,
-    button-bg-active: #616161,
-    tab-bg: tokens.$dark-700,
-    tab-bg-hover: #3c3c3c,
-    tooltip-bg: tokens.$dark-500,
-    error-color: tokens.$danger-dark,
-    required-color: tokens.$required-dark,
-    invalid-font-color: tokens.$required-dark,
-    invalid-border-color: tokens.$invalid-border-dark,
-    invalid-bg: tokens.$invalid-bg-dark,
-    hover-bg: #2b2b2b,
-    selected-bg: tokens.$selection-bg-dark,
-    selected-border-color: tokens.$selection-border-dark,
-    selected-color: tokens.$link-dark,
+    // ---- 버튼 / 탭 ----
+    button-bg: #2a3444,
+    button-border-color: #444c5c,
+    // components 는 ui-grid 값(#727272)을 그대로 쓰고 report-studio 만 #3a4558 이다. 남색 바탕에 맞는 report-studio 값을 채택.
+    button-hover-bg: #3a4558,
+    button-bg-active: #444c5c, // 파생 (button-border-color 와 동일)
+    tab-bg: #18202c, // 파생 (panel-header-bg 와 동일)
+    tab-bg-hover: #2f3b4f, // 파생
+    // ---- 툴팁 ----
+    tooltip-bg: tokens.$dark-500, // ui-grid
+    // ---- 오류 / 검증 ----
+    error-color: #ff8a80,
+    error-bg: #3a2326,
+    error-border-color: #6b3036,
+    required-color: tokens.$required-dark, // ui-grid
+    invalid-font-color: tokens.$required-dark, // ui-grid
+    invalid-border-color: tokens.$invalid-border-dark, // ui-grid
+    invalid-bg: tokens.$invalid-bg-dark, // ui-grid
+    // ---- hover / selected 쌍 ----
+    hover-bg: #2f3b4f,
+    hover-color: tokens.$white, // 파생
+    hover-accent-bg: #1f3d5c, // 파생 (ui-tree dark 는 밝은 하늘색 + 검정 글자라 쌍이 맞지 않음)
+    hover-accent-color: tokens.$white, // 파생
+    selected-bg: tokens.$selection-bg-dark, // ui-grid cell-bg-selection / item-selected
+    selected-color: tokens.$white, // 파생
+    selected-border-color: tokens.$selection-border-dark, // ui-grid
+    item-check-color: tokens.$link-dark, // ui-grid
+    search-match-color: #1fa0ff, // ui-tree dark item-search-font-color
+    accent-text-color: #68e4f9, // ui-multiSelect dark add-item-color
+    today-bg: #5660d9, // ui-datetimepicker dark
+    // ---- 체크 / 스위치 (ui-grid) ----
     check-bg: tokens.$dark-200,
     check-active-bg: #00c1ff,
     check-mark-color: #4e4e4e,
     check-indeterminate-bg: tokens.$icon-stroke-dark,
-    scroll-bg: tokens.$dark-850,
-    scroll-track-bg: tokens.$dark-850,
-    scroll-thumb-bg: #555555,
-    scroll-thumb-hover-bg: #777777,
-    scroll-button-bg: tokens.$dark-600,
+    // ---- 스크롤 : 남색 바탕에 맞춰 파생 ----
+    scroll-bg: #18202c,
+    scroll-track-bg: #18202c,
+    scroll-thumb-bg: #3a4456,
+    scroll-thumb-hover-bg: #4a5466,
+    scroll-button-bg: #2a3444,
+    // ---- 아이콘 (ui-grid) ----
     icon-stroke-color: tokens.$icon-stroke-dark,
     icon-fill-stroke-color: tokens.$dark-900,
     empty-icon-color: #888888,
+    // ---- 오버레이 / 그림자 ----
     overlay-bg: rgba(0, 0, 0, 0.6),
-    shadow: 0 4px 10px rgba(0, 0, 0, 0.5),
-    page-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
+    shadow: 0 2px 8px rgba(0, 0, 0, 0.45),
+    page-shadow: 0 1px 4px rgba(0, 0, 0, 0.5),
   )
 );

@@ -1,4 +1,4 @@
-@use '../abstracts/functions' as fn;
+@use '../themes/mixins' as themes;
 @use '../abstracts/variables';
 @use '../tokens';
 
@@ -6,7 +6,7 @@
 // (ui-grid 의 .dg-scroll-* 는 JS 가상 스크롤용 DOM 이라 공통화하지 않았다.)
 @mixin scrollbar($size: tokens.$scrollbar-size, $prefix: variables.$prefix, $radius: 0.5em) {
   scrollbar-width: thin; // Firefox
-  scrollbar-color: #{fn.token(scroll-thumb-bg, $prefix: $prefix)} #{fn.token(scroll-track-bg, $prefix: $prefix)};
+  scrollbar-color: #{themes.themed(scroll-thumb-bg, $prefix: $prefix)} #{themes.themed(scroll-track-bg, $prefix: $prefix)};
 
   &::-webkit-scrollbar {
     width: $size;
@@ -15,15 +15,15 @@
 
   &::-webkit-scrollbar-track,
   &::-webkit-scrollbar-corner {
-    background-color: fn.token(scroll-track-bg, $prefix: $prefix);
+    background-color: themes.themed(scroll-track-bg, $prefix: $prefix);
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: $radius;
-    background-color: fn.token(scroll-thumb-bg, $prefix: $prefix);
+    background-color: themes.themed(scroll-thumb-bg, $prefix: $prefix);
 
     &:hover {
-      background-color: fn.token(scroll-thumb-hover-bg, $prefix: $prefix);
+      background-color: themes.themed(scroll-thumb-hover-bg, $prefix: $prefix);
     }
   }
 }

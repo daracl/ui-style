@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@daracl/ui-style 가이드</title>
+<meta name="description" content="Daracl UI 공통 SCSS 라이브러리 사용 가이드: 테마 변수, 디자인 토큰, API, 컴포넌트 작성 규칙">
+<style>
+/* 이 페이지 자체도 ui-style 의 테마 변수(--dui-*)로 스타일링한다. (dist/theme-vars.css 를 그대로 포함) */
+:root, [data-daracl-theme=light] {
+  --dui-primary-color: #2563eb;
+  --dui-primary-hover-color: #1d4ed8;
+  --dui-primary-font-color: #ffffff;
+  --dui-primary-soft-bg: rgba(37, 99, 235, 0.1);
+  --dui-danger-color: #dc2626;
+  --dui-alert-success-color: #0abf30;
+  --dui-alert-error-color: #e24d4c;
+  --dui-alert-warning-color: #e9bd0c;
+  --dui-alert-info-color: #3498db;
+  --dui-active-bg: #337ab7;
+  --dui-active-color: #ffffff;
+  --dui-sunday-color: #f00d0d;
+  --dui-bar-positive-bg: #77c0fc;
+  --dui-bar-negative-bg: #ff8989;
+  --dui-tooltip-color: #ffffff;
+  --dui-icon-stroke-on-color: #ffffff;
+  --dui-icon-fill-stroke-on-color: #494949;
+  --dui-font-color: #222222;
+  --dui-label-color: #444444;
+  --dui-font-hover-color: #000000;
+  --dui-font-disable-color: #9aa1ab;
+  --dui-muted-color: #8a919c;
+  --dui-border-color: #d9dde3;
+  --dui-border-thick-color: #b9bdc1;
+  --dui-border-light-color: #e5e7eb;
+  --dui-divider-color: #cccccc;
+  --dui-body-bg: #ffffff;
+  --dui-body-bg-thin: #f0f0f0;
+  --dui-body-bg-deep: #dedede;
+  --dui-body-bg-hover: #d2d2d2;
+  --dui-disabled-bg: #ebebeb;
+  --dui-panel-header-bg: #f7f9fc;
+  --dui-input-bg: #ffffff;
+  --dui-input-color: #212529;
+  --dui-input-border-color: #cdcdcd;
+  --dui-input-border-hover-color: #b9bdc1;
+  --dui-input-disabled-bg: #ebebeb;
+  --dui-button-bg: #ffffff;
+  --dui-button-border-color: #c9ced6;
+  --dui-button-hover-bg: #e3e3e3;
+  --dui-button-bg-active: #dfe7f3;
+  --dui-tab-bg: #f6f6f6;
+  --dui-tab-bg-hover: #ebebeb;
+  --dui-tooltip-bg: #3e3e3e;
+  --dui-error-color: #b42318;
+  --dui-error-bg: #fff4f4;
+  --dui-error-border-color: #f0b4b4;
+  --dui-required-color: #ff4136;
+  --dui-invalid-font-color: #ff4136;
+  --dui-invalid-border-color: #ffb6b4;
+  --dui-invalid-bg: #ffdddd;
+  --dui-hover-bg: #eef3fc;
+  --dui-hover-color: #000000;
+  --dui-hover-accent-bg: #dff5ff;
+  --dui-hover-accent-color: #000000;
+  --dui-selected-bg: #e9faff;
+  --dui-selected-color: #212529;
+  --dui-selected-border-color: #4762fa;
+  --dui-item-check-color: #1a73e8;
+  --dui-search-match-color: #0040ff;
+  --dui-accent-text-color: #5970f5;
+  --dui-today-bg: #a9d5ff;
+  --dui-check-bg: #dfdfdf;
+  --dui-check-active-bg: #4caf50;
+  --dui-check-mark-color: #ffffff;
+  --dui-check-indeterminate-bg: #686868;
+  --dui-scroll-bg: #f7f7f7;
+  --dui-scroll-track-bg: #f7f7f7;
+  --dui-scroll-thumb-bg: #a5a5a5;
+  --dui-scroll-thumb-hover-bg: #696969;
+  --dui-scroll-button-bg: #c5c3c3;
+  --dui-icon-stroke-color: #5a5858;
+  --dui-icon-fill-stroke-color: #ffffff;
+  --dui-empty-icon-color: #adabab;
+  --dui-overlay-bg: rgba(15, 23, 42, 0.45);
+  --dui-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --dui-page-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-daracl-theme]) {
+    --dui-primary-color: #2563eb;
+    --dui-primary-hover-color: #1d4ed8;
+    --dui-primary-font-color: #ffffff;
+    --dui-primary-soft-bg: rgba(37, 99, 235, 0.1);
+    --dui-danger-color: #dc2626;
+    --dui-alert-success-color: #0abf30;
+    --dui-alert-error-color: #e24d4c;
+    --dui-alert-warning-color: #e9bd0c;
+    --dui-alert-info-color: #3498db;
+    --dui-active-bg: #337ab7;
+    --dui-active-color: #ffffff;
+    --dui-sunday-color: #f00d0d;
+    --dui-bar-positive-bg: #77c0fc;
+    --dui-bar-negative-bg: #ff8989;
+    --dui-tooltip-color: #ffffff;
+    --dui-icon-stroke-on-color: #ffffff;
+    --dui-icon-fill-stroke-on-color: #494949;
+    --dui-font-color: #dddddd;
+    --dui-label-color: #c5ccd6;
+    --dui-font-hover-color: #ffffff;
+    --dui-font-disable-color: #6b7482;
+    --dui-muted-color: #8d96a3;
+    --dui-border-color: #3a4456;
+    --dui-border-thick-color: #807e7e;
+    --dui-border-light-color: #3a4456;
+    --dui-divider-color: #4a5466;
+    --dui-body-bg: #1f2836;
+    --dui-body-bg-thin: #273244;
+    --dui-body-bg-deep: #2f3b4f;
+    --dui-body-bg-hover: #2f3b4f;
+    --dui-disabled-bg: #555555;
+    --dui-panel-header-bg: #18202c;
+    --dui-input-bg: #2a2a2a;
+    --dui-input-color: #f0f0f0;
+    --dui-input-border-color: #585858;
+    --dui-input-border-hover-color: #807e7e;
+    --dui-input-disabled-bg: #555555;
+    --dui-button-bg: #2a3444;
+    --dui-button-border-color: #444c5c;
+    --dui-button-hover-bg: #3a4558;
+    --dui-button-bg-active: #444c5c;
+    --dui-tab-bg: #18202c;
+    --dui-tab-bg-hover: #2f3b4f;
+    --dui-tooltip-bg: #444444;
+    --dui-error-color: #ff8a80;
+    --dui-error-bg: #3a2326;
+    --dui-error-border-color: #6b3036;
+    --dui-required-color: #ff9b9b;
+    --dui-invalid-font-color: #ff9b9b;
+    --dui-invalid-border-color: #ff5e5e;
+    --dui-invalid-bg: #3a1f1f;
+    --dui-hover-bg: #2f3b4f;
+    --dui-hover-color: #ffffff;
+    --dui-hover-accent-bg: #1f3d5c;
+    --dui-hover-accent-color: #ffffff;
+    --dui-selected-bg: #264f78;
+    --dui-selected-color: #ffffff;
+    --dui-selected-border-color: #47dcfa;
+    --dui-item-check-color: #68a9ff;
+    --dui-search-match-color: #1fa0ff;
+    --dui-accent-text-color: #68e4f9;
+    --dui-today-bg: #5660d9;
+    --dui-check-bg: #979797;
+    --dui-check-active-bg: #00c1ff;
+    --dui-check-mark-color: #4e4e4e;
+    --dui-check-indeterminate-bg: #fffbfb;
+    --dui-scroll-bg: #18202c;
+    --dui-scroll-track-bg: #18202c;
+    --dui-scroll-thumb-bg: #3a4456;
+    --dui-scroll-thumb-hover-bg: #4a5466;
+    --dui-scroll-button-bg: #2a3444;
+    --dui-icon-stroke-color: #fffbfb;
+    --dui-icon-fill-stroke-color: #1a1a1a;
+    --dui-empty-icon-color: #888888;
+    --dui-overlay-bg: rgba(0, 0, 0, 0.6);
+    --dui-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    --dui-page-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+[data-daracl-theme=dark] {
+  --dui-primary-color: #2563eb;
+  --dui-primary-hover-color: #1d4ed8;
+  --dui-primary-font-color: #ffffff;
+  --dui-primary-soft-bg: rgba(37, 99, 235, 0.1);
+  --dui-danger-color: #dc2626;
+  --dui-alert-success-color: #0abf30;
+  --dui-alert-error-color: #e24d4c;
+  --dui-alert-warning-color: #e9bd0c;
+  --dui-alert-info-color: #3498db;
+  --dui-active-bg: #337ab7;
+  --dui-active-color: #ffffff;
+  --dui-sunday-color: #f00d0d;
+  --dui-bar-positive-bg: #77c0fc;
+  --dui-bar-negative-bg: #ff8989;
+  --dui-tooltip-color: #ffffff;
+  --dui-icon-stroke-on-color: #ffffff;
+  --dui-icon-fill-stroke-on-color: #494949;
+  --dui-font-color: #dddddd;
+  --dui-label-color: #c5ccd6;
+  --dui-font-hover-color: #ffffff;
+  --dui-font-disable-color: #6b7482;
+  --dui-muted-color: #8d96a3;
+  --dui-border-color: #3a4456;
+  --dui-border-thick-color: #807e7e;
+  --dui-border-light-color: #3a4456;
+  --dui-divider-color: #4a5466;
+  --dui-body-bg: #1f2836;
+  --dui-body-bg-thin: #273244;
+  --dui-body-bg-deep: #2f3b4f;
+  --dui-body-bg-hover: #2f3b4f;
+  --dui-disabled-bg: #555555;
+  --dui-panel-header-bg: #18202c;
+  --dui-input-bg: #2a2a2a;
+  --dui-input-color: #f0f0f0;
+  --dui-input-border-color: #585858;
+  --dui-input-border-hover-color: #807e7e;
+  --dui-input-disabled-bg: #555555;
+  --dui-button-bg: #2a3444;
+  --dui-button-border-color: #444c5c;
+  --dui-button-hover-bg: #3a4558;
+  --dui-button-bg-active: #444c5c;
+  --dui-tab-bg: #18202c;
+  --dui-tab-bg-hover: #2f3b4f;
+  --dui-tooltip-bg: #444444;
+  --dui-error-color: #ff8a80;
+  --dui-error-bg: #3a2326;
+  --dui-error-border-color: #6b3036;
+  --dui-required-color: #ff9b9b;
+  --dui-invalid-font-color: #ff9b9b;
+  --dui-invalid-border-color: #ff5e5e;
+  --dui-invalid-bg: #3a1f1f;
+  --dui-hover-bg: #2f3b4f;
+  --dui-hover-color: #ffffff;
+  --dui-hover-accent-bg: #1f3d5c;
+  --dui-hover-accent-color: #ffffff;
+  --dui-selected-bg: #264f78;
+  --dui-selected-color: #ffffff;
+  --dui-selected-border-color: #47dcfa;
+  --dui-item-check-color: #68a9ff;
+  --dui-search-match-color: #1fa0ff;
+  --dui-accent-text-color: #68e4f9;
+  --dui-today-bg: #5660d9;
+  --dui-check-bg: #979797;
+  --dui-check-active-bg: #00c1ff;
+  --dui-check-mark-color: #4e4e4e;
+  --dui-check-indeterminate-bg: #fffbfb;
+  --dui-scroll-bg: #18202c;
+  --dui-scroll-track-bg: #18202c;
+  --dui-scroll-thumb-bg: #3a4456;
+  --dui-scroll-thumb-hover-bg: #4a5466;
+  --dui-scroll-button-bg: #2a3444;
+  --dui-icon-stroke-color: #fffbfb;
+  --dui-icon-fill-stroke-color: #1a1a1a;
+  --dui-empty-icon-color: #888888;
+  --dui-overlay-bg: rgba(0, 0, 0, 0.6);
+  --dui-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --dui-page-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+:root{color-scheme:light dark;--g-font:-apple-system,'Segoe UI','Malgun Gothic',sans-serif;--g-mono:Consolas,'D2Coding',monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--dui-body-bg);color:var(--dui-font-color);font:14px/1.65 var(--g-font)}
+a{color:var(--dui-primary-color)}
+code,pre{font-family:var(--g-mono);font-size:12.5px}
+:not(pre)>code{background:var(--dui-body-bg-thin);border:1px solid var(--dui-border-light-color);border-radius:4px;padding:0 5px}
+.layout{display:flex;min-height:100vh}
+nav.side{position:sticky;top:0;align-self:flex-start;width:240px;flex:none;height:100vh;overflow:auto;padding:20px 14px;border-right:1px solid var(--dui-border-color);background:var(--dui-panel-header-bg)}
+nav.side .brand{font-weight:700;font-size:15px;margin:0 6px 2px}
+nav.side .ver{color:var(--dui-muted-color);font-size:12px;margin:0 6px 14px}
+nav.side a{display:block;padding:5px 8px;border-radius:4px;color:var(--dui-label-color);text-decoration:none}
+nav.side a:hover{background:var(--dui-hover-bg);color:var(--dui-hover-color)}
+nav.side a.sub{padding-left:20px;font-size:13px;color:var(--dui-muted-color)}
+nav.side a.active{background:var(--dui-selected-bg);color:var(--dui-selected-color);font-weight:600}
+main{flex:1;min-width:0;max-width:1040px;padding:28px 36px 80px}
+h1{font-size:28px;margin:0 0 6px}
+h2{font-size:21px;margin:48px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--dui-border-color)}
+h3{font-size:16px;margin:28px 0 8px}
+h4{font-size:14px;margin:22px 0 6px;color:var(--dui-label-color)}
+p{margin:8px 0}
+.lead{color:var(--dui-label-color);font-size:15px}
+.d{color:var(--dui-muted-color);font-size:12.5px}
+ul{padding-left:20px}li{margin:3px 0}
+.tw{overflow-x:auto;border:1px solid var(--dui-border-color);border-radius:6px;margin:8px 0 16px}
+table{border-collapse:collapse;width:100%}
+th,td{padding:7px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--dui-border-light-color)}
+th{background:var(--dui-panel-header-bg);color:var(--dui-label-color);font-weight:600;font-size:12.5px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.tt td:first-child{white-space:nowrap}
+.v{display:flex;align-items:center;gap:8px;min-height:22px}
+.sw{display:inline-block;width:22px;height:22px;border-radius:4px;border:1px solid var(--dui-border-color);flex:none}
+.sw.sh{border:0;background:var(--dui-body-bg)}
+.bar{display:inline-block;height:10px;background:var(--dui-primary-color);border-radius:2px}
+.rad{display:inline-block;width:30px;height:22px;border:2px solid var(--dui-primary-color)}
+.tag{display:inline-block;margin-right:8px;padding:0 6px;border-radius:10px;font-size:11px;font-weight:600;color:var(--dui-primary-font-color)}
+.tag.mixin{background:var(--dui-primary-color)}.tag.function{background:var(--dui-check-active-bg);color:var(--dui-check-mark-color)}
+.code{position:relative;margin:10px 0 16px}
+.code pre{margin:0;padding:12px 14px;background:var(--dui-body-bg-thin);border:1px solid var(--dui-border-color);border-radius:6px;overflow:auto;line-height:1.55}
+.code .copy{position:absolute;top:6px;right:6px;font:12px var(--g-font);padding:2px 8px;border-radius:4px;border:1px solid var(--dui-input-border-color);background:var(--dui-button-bg);color:var(--dui-font-color);cursor:pointer;opacity:.0;transition:opacity .15s}
+.code:hover .copy,.code .copy:focus{opacity:1}
+.callout{border-left:4px solid var(--dui-primary-color);background:var(--dui-primary-soft-bg);padding:10px 14px;border-radius:0 6px 6px 0;margin:14px 0}
+.callout.warn{border-color:var(--dui-alert-warning-color);background:var(--dui-body-bg-thin)}
+.callout.bad{border-color:var(--dui-error-color);background:var(--dui-error-bg)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:10px 0 18px}
+.card{border:1px solid var(--dui-border-color);border-radius:6px;padding:12px 14px;background:var(--dui-body-bg);box-shadow:var(--dui-page-shadow)}
+.card b{display:block;margin-bottom:2px}
+.pair .chip{padding:10px 12px;border-radius:6px;border:1px solid var(--dui-border-light-color);margin-bottom:6px;font-weight:600}
+.demo{border:1px solid var(--dui-border-color);border-radius:8px;padding:16px;background:var(--dui-body-bg);margin:10px 0 16px}
+.demo .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.demo input,.demo button.f{height:28px;padding:0 8px 0 5px;border:1px solid var(--dui-input-border-color);border-radius:4px;background:var(--dui-input-bg);color:var(--dui-input-color);font:12px var(--g-font)}
+.demo button.f{background:var(--dui-button-bg);padding:0 10px;cursor:pointer}
+.demo input:hover,.demo input:focus{border-color:var(--dui-input-border-hover-color);outline:0}
+.demo button.f:hover{background:var(--dui-button-hover-bg)}
+.toolbar{position:fixed;right:16px;bottom:16px;z-index:10000;display:flex;gap:6px;padding:6px;border:1px solid var(--dui-border-color);border-radius:8px;background:var(--dui-body-bg);box-shadow:var(--dui-shadow)}
+.toolbar button{font:12px var(--g-font);padding:4px 10px;border:1px solid var(--dui-input-border-color);border-radius:4px;background:var(--dui-button-bg);color:var(--dui-font-color);cursor:pointer}
+.toolbar button[aria-pressed=true]{background:var(--dui-active-bg);color:var(--dui-active-color);border-color:var(--dui-active-bg)}
+@media (max-width:900px){.layout{display:block}nav.side{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--dui-border-color);display:flex;flex-wrap:wrap;gap:2px;padding:12px}nav.side .brand,nav.side .ver{width:100%}nav.side a.sub{display:none}main{padding:20px 16px 80px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="side" id="nav">
+  <div class="brand">@daracl/ui-style</div>
+  <div class="ver">v0.0.1 · 사용 가이드</div>
+  <a href="#overview">개요</a>
+  <a href="#install">설치 · 진입점</a>
+  <a href="#quick">빠른 시작</a>
+  <a href="#theme">테마</a>
+  <a class="sub" href="#theme-switch">전환 방법</a>
+  <a class="sub" href="#theme-tokens">테마 변수 목록</a>
+  <a href="#tokens">디자인 토큰</a>
+  <a href="#api">API 레퍼런스</a>
+  <a href="#rules">컴포넌트 작성 규칙</a>
+  <a href="#projects">프로젝트 적용 현황</a>
+  <a class="sub" href="#renames">변수 이름 매핑</a>
+  <a href="#build">빌드 · 배포</a>
+</nav>
+<main>
+<h1>@daracl/ui-style</h1>
+<p class="lead">Daracl UI 프로젝트가 공통으로 쓰는 SCSS 라이브러리입니다. 디자인 토큰, 라이트 / 다크 테마, 믹스인, 함수, 유틸리티를 제공합니다.</p>
+
+<h2 id="overview">개요</h2>
+<div class="cards">
+  <div class="card"><b>가져오기만 해서는 CSS 가 나오지 않음</b>변수 · 함수 · 믹스인을 <code>@use</code> 해도 출력이 없습니다. 출력은 <code>@include</code> 로 명시합니다.</div>
+  <div class="card"><b>런타임 테마 전환</b>색상은 CSS 변수(<code>--dui-*</code>)로 제공됩니다. <code>data-daracl-theme</code> 속성 또는 OS 설정으로 전환합니다.</div>
+  <div class="card"><b>단독으로도 표시</b>컴포넌트 CSS 는 light 값을 fallback 으로 갖습니다. dark 는 <code>theme-vars.css</code> 를 로드하면 됩니다.</div>
+  <div class="card"><b>모든 프로젝트가 같은 값</b>프로젝트 전용 값만 지역 변수(<code>--dg-*</code> 등)로 두고, 나머지는 이 라이브러리의 변수를 씁니다.</div>
+</div>
+
+<h2 id="install">설치 · 진입점</h2>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-bash">yarn add @daracl/ui-style
+yarn add -D sass   # SCSS 를 사용하는 경우 (&gt;=1.80)</code></pre></div>
+<div class="tw"><table class="tt"><thead><tr><th>경로</th><th>내용</th></tr></thead><tbody>
+<tr><td><code>@daracl/ui-style/abstracts</code></td><td class="d">토큰 + 변수 + 함수 + 믹스인 + 브레이크포인트 (CSS 출력 없음)</td></tr>
+<tr><td><code>@daracl/ui-style/tokens</code></td><td class="d">디자인 토큰만</td></tr>
+<tr><td><code>@daracl/ui-style/themes</code></td><td class="d">테마 맵과 테마 출력 믹스인, <code>themed()</code></td></tr>
+<tr><td><code>@daracl/ui-style/base</code></td><td class="d">reset, keyframes, spinner</td></tr>
+<tr><td><code>@daracl/ui-style/utilities</code></td><td class="d">scrollbar, 유틸리티 클래스</td></tr>
+<tr><td><code>@daracl/ui-style</code></td><td class="d">위 전체 (<code>theme-*</code>, <code>base-*</code>, <code>util-*</code> 접두사로 forward)</td></tr>
+<tr><td><code>@daracl/ui-style/style.css</code></td><td class="d">테마 변수 + keyframes + 유틸리티 클래스</td></tr>
+<tr><td><code>@daracl/ui-style/theme-vars.css</code></td><td class="d">테마 CSS 변수만 (dark 전환에 필요)</td></tr>
+</tbody></table></div>
+<h3>빌드 도구별 해석</h3>
+<div class="tw"><table class="tt"><thead><tr><th>도구</th><th>방법</th></tr></thead><tbody>
+<tr><td>Vite / webpack</td><td class="d"><code>@use '@daracl/ui-style/abstracts'</code> 그대로 (package.json <code>exports</code> 의 <code>sass</code> 조건)</td></tr>
+<tr><td>esbuild-sass-plugin</td><td class="d">위와 동일하게 동작을 확인했습니다</td></tr>
+<tr><td>sass CLI</td><td class="d"><code>sass --load-path=node_modules style/app.scss out.css</code> — 패키지 루트의 진입 파일(<code>abstracts/</code>, <code>themes/</code> …)로 해석됩니다</td></tr>
+<tr><td>Sass JS API</td><td class="d"><code>NodePackageImporter</code> 를 쓰면 <code>@use 'pkg:@daracl/ui-style/abstracts'</code></td></tr>
+</tbody></table></div>
+
+<h2 id="quick">빠른 시작</h2>
+<h3>SCSS 에서 쓰기</h3>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-scss">@use '@daracl/ui-style/abstracts' as style;
+@use '@daracl/ui-style/themes' as themes;
+
+.my-panel {
+  padding: style.$spacing-md;                    // 12px
+  border-radius: style.radius(md);               // 4px
+  z-index: style.z(dropdown);                    // 1000
+
+  // 색은 테마 변수로 → var(--dui-border-color, #d9dde3)
+  border: 1px solid themes.themed(border-color);
+  background: themes.themed(body-bg);
+  color: themes.themed(font-color);
+
+  @include style.flex-between;
+  @include style.respond-below(md) { display: none; }
+}
+
+.my-input  { @include style.form-control; }
+.my-button { @include style.form-button; }</code></pre></div>
+<h3>CSS 만 쓰기 (SCSS 없이)</h3>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-js">import '@daracl/ui-style/theme-vars.css';   // 테마 변수만
+// 또는 import '@daracl/ui-style/style.css';   // 변수 + keyframes + 유틸리티 클래스</code></pre></div>
+<h3>dark 로 전환</h3>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-js">document.documentElement.setAttribute('data-daracl-theme', 'dark');   // 페이지 전체
+element.setAttribute('data-daracl-theme', 'dark');                  // 일부 영역만</code></pre></div>
+
+<h2 id="theme">테마</h2>
+<h3 id="theme-switch">전환 방법</h3>
+<p>지원하는 전환 방식은 <b>두 가지</b>입니다.</p>
+<ul>
+  <li><code>data-daracl-theme="light | dark"</code> 속성 — 요소 단위로 지정할 수 있고, 가장 가까운 조상의 값이 적용됩니다.</li>
+  <li>OS 설정(<code>prefers-color-scheme: dark</code>) — 속성이 없을 때만 따릅니다. <code>style.css</code> / <code>theme-vars.css</code> 에 포함되어 있습니다.</li>
+</ul>
+<div class="callout warn">이전 프로젝트에서 쓰던 <code>body.dark</code>, <code>.dark</code> 같은 클래스 방식은 지원하지 않습니다. 오른쪽 아래 버튼으로 이 페이지의 테마를 직접 바꿔 볼 수 있습니다.</div>
+<div class="demo" aria-label="테마 데모">
+  <div class="row"><input type="text" value="입력 요소" aria-label="입력 예"> <button class="f" type="button">버튼</button>
+  <span class="d">현재 테마: <b id="cur-theme">auto</b></span></div>
+</div>
+<h4>hover / selected / active — 배경과 글자색은 항상 쌍으로 씁니다</h4>
+<p class="d">배경만 바꾸면 다른 테마에서 글자가 읽히지 않을 수 있어, 아래 쌍은 반드시 함께 사용합니다.</p>
+<div class="cards"><div class="pair"><div class="chip" style="background:var(--dui-hover-bg);color:var(--dui-hover-color)">hover · 가나다 ABC 123</div><div class="d"><code>hover-bg</code> + <code>hover-color</code><br>목록 / 셀 hover 바탕 (중립)</div></div>
+<div class="pair"><div class="chip" style="background:var(--dui-hover-accent-bg);color:var(--dui-hover-accent-color)">hover-accent · 가나다 ABC 123</div><div class="d"><code>hover-accent-bg</code> + <code>hover-accent-color</code><br>hover 바탕 (파란 강조)</div></div>
+<div class="pair"><div class="chip" style="background:var(--dui-selected-bg);color:var(--dui-selected-color)">selected · 가나다 ABC 123</div><div class="d"><code>selected-bg</code> + <code>selected-color</code><br>선택 바탕</div></div>
+<div class="pair"><div class="chip" style="background:var(--dui-active-bg);color:var(--dui-active-color)">active · 가나다 ABC 123</div><div class="d"><code>active-bg</code> + <code>active-color</code><br>눌림 / 활성 바탕 (페이지네이션 등)</div></div></div>
+<div class="callout bad"><b>단독 사용 시 주의</b> dark 값은 <code>theme-vars.css</code> 가 있어야 적용됩니다. 로드하지 않으면 컴포넌트는 light fallback 으로 표시됩니다. 컴포넌트 안에서 <code>--dui-*</code> 를 다시 선언하지 마세요. 요소에 직접 선언한 값이 앱이 <code>:root</code> 에 지정한 값을 덮어씁니다.</div>
+
+<h3 id="theme-tokens">테마 변수 목록 <span class="d">(77개 · 빌드된 theme-vars.css 기준)</span></h3>
+<h4>글자</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-font-color</code><div class="d">기본 글자색</div></td><td><div class="v"><span class="sw" style="background:#222222"></span><code>#222222</code></div></td><td><div class="v"><span class="sw" style="background:#dddddd"></span><code>#dddddd</code></div></td></tr><tr><td><code>--dui-label-color</code><div class="d">라벨 / 헤더 글자색 (기본보다 약간 연함)</div></td><td><div class="v"><span class="sw" style="background:#444444"></span><code>#444444</code></div></td><td><div class="v"><span class="sw" style="background:#c5ccd6"></span><code>#c5ccd6</code></div></td></tr><tr><td><code>--dui-font-hover-color</code><div class="d">hover 시 글자색</div></td><td><div class="v"><span class="sw" style="background:#000000"></span><code>#000000</code></div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td></tr><tr><td><code>--dui-font-disable-color</code><div class="d">비활성 글자색</div></td><td><div class="v"><span class="sw" style="background:#9aa1ab"></span><code>#9aa1ab</code></div></td><td><div class="v"><span class="sw" style="background:#6b7482"></span><code>#6b7482</code></div></td></tr><tr><td><code>--dui-muted-color</code><div class="d">보조 설명 글자색</div></td><td><div class="v"><span class="sw" style="background:#8a919c"></span><code>#8a919c</code></div></td><td><div class="v"><span class="sw" style="background:#8d96a3"></span><code>#8d96a3</code></div></td></tr></tbody></table></div>
+<h4>테두리 · 구분선</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-border-color</code><div class="d">패널 / 표 / 탭의 기본 테두리</div></td><td><div class="v"><span class="sw" style="background:#d9dde3"></span><code>#d9dde3</code></div></td><td><div class="v"><span class="sw" style="background:#3a4456"></span><code>#3a4456</code></div></td></tr><tr><td><code>--dui-border-thick-color</code><div class="d">강조 테두리 (입력 요소 hover 등)</div></td><td><div class="v"><span class="sw" style="background:#b9bdc1"></span><code>#b9bdc1</code></div></td><td><div class="v"><span class="sw" style="background:#807e7e"></span><code>#807e7e</code></div></td></tr><tr><td><code>--dui-border-light-color</code><div class="d">연한 구분 테두리 (카드, 섹션)</div></td><td><div class="v"><span class="sw" style="background:#e5e7eb"></span><code>#e5e7eb</code></div></td><td><div class="v"><span class="sw" style="background:#3a4456"></span><code>#3a4456</code></div></td></tr><tr><td><code>--dui-divider-color</code><div class="d">구분선</div></td><td><div class="v"><span class="sw" style="background:#cccccc"></span><code>#cccccc</code></div></td><td><div class="v"><span class="sw" style="background:#4a5466"></span><code>#4a5466</code></div></td></tr></tbody></table></div>
+<h4>배경</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-body-bg</code><div class="d">기본 바탕 (패널, 팝업, 본문)</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#1f2836"></span><code>#1f2836</code></div></td></tr><tr><td><code>--dui-body-bg-thin</code><div class="d">한 단계 구분되는 바탕 (그룹, 줄무늬)</div></td><td><div class="v"><span class="sw" style="background:#f0f0f0"></span><code>#f0f0f0</code></div></td><td><div class="v"><span class="sw" style="background:#273244"></span><code>#273244</code></div></td></tr><tr><td><code>--dui-body-bg-deep</code><div class="d">두 단계 구분되는 바탕 (중첩 그룹)</div></td><td><div class="v"><span class="sw" style="background:#dedede"></span><code>#dedede</code></div></td><td><div class="v"><span class="sw" style="background:#2f3b4f"></span><code>#2f3b4f</code></div></td></tr><tr><td><code>--dui-body-bg-hover</code><div class="d">바탕 hover</div></td><td><div class="v"><span class="sw" style="background:#d2d2d2"></span><code>#d2d2d2</code></div></td><td><div class="v"><span class="sw" style="background:#2f3b4f"></span><code>#2f3b4f</code></div></td></tr><tr><td><code>--dui-disabled-bg</code><div class="d">비활성 바탕</div></td><td><div class="v"><span class="sw" style="background:#ebebeb"></span><code>#ebebeb</code></div></td><td><div class="v"><span class="sw" style="background:#555555"></span><code>#555555</code></div></td></tr><tr><td><code>--dui-panel-header-bg</code><div class="d">패널 / 표 / 대화상자 헤더 바탕</div></td><td><div class="v"><span class="sw" style="background:#f7f9fc"></span><code>#f7f9fc</code></div></td><td><div class="v"><span class="sw" style="background:#18202c"></span><code>#18202c</code></div></td></tr></tbody></table></div>
+<h4>입력 요소</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-input-bg</code><div class="d">입력 요소 바탕</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#2a2a2a"></span><code>#2a2a2a</code></div></td></tr><tr><td><code>--dui-input-color</code><div class="d">입력 요소 글자색</div></td><td><div class="v"><span class="sw" style="background:#212529"></span><code>#212529</code></div></td><td><div class="v"><span class="sw" style="background:#f0f0f0"></span><code>#f0f0f0</code></div></td></tr><tr><td><code>--dui-input-border-color</code><div class="d">입력 요소 / 버튼 테두리</div></td><td><div class="v"><span class="sw" style="background:#cdcdcd"></span><code>#cdcdcd</code></div></td><td><div class="v"><span class="sw" style="background:#585858"></span><code>#585858</code></div></td></tr><tr><td><code>--dui-input-border-hover-color</code><div class="d">입력 요소 hover / focus 테두리</div></td><td><div class="v"><span class="sw" style="background:#b9bdc1"></span><code>#b9bdc1</code></div></td><td><div class="v"><span class="sw" style="background:#807e7e"></span><code>#807e7e</code></div></td></tr><tr><td><code>--dui-input-disabled-bg</code><div class="d">비활성 입력 바탕</div></td><td><div class="v"><span class="sw" style="background:#ebebeb"></span><code>#ebebeb</code></div></td><td><div class="v"><span class="sw" style="background:#555555"></span><code>#555555</code></div></td></tr></tbody></table></div>
+<h4>버튼 · 탭 · 툴팁</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-button-bg</code><div class="d">버튼 바탕</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#2a3444"></span><code>#2a3444</code></div></td></tr><tr><td><code>--dui-button-border-color</code><div class="d">버튼 테두리 (에디터 계열)</div></td><td><div class="v"><span class="sw" style="background:#c9ced6"></span><code>#c9ced6</code></div></td><td><div class="v"><span class="sw" style="background:#444c5c"></span><code>#444c5c</code></div></td></tr><tr><td><code>--dui-button-hover-bg</code><div class="d">버튼 hover 바탕</div></td><td><div class="v"><span class="sw" style="background:#e3e3e3"></span><code>#e3e3e3</code></div></td><td><div class="v"><span class="sw" style="background:#3a4558"></span><code>#3a4558</code></div></td></tr><tr><td><code>--dui-button-bg-active</code><div class="d">버튼 눌림 바탕</div></td><td><div class="v"><span class="sw" style="background:#dfe7f3"></span><code>#dfe7f3</code></div></td><td><div class="v"><span class="sw" style="background:#444c5c"></span><code>#444c5c</code></div></td></tr><tr><td><code>--dui-tab-bg</code><div class="d">탭 바탕</div></td><td><div class="v"><span class="sw" style="background:#f6f6f6"></span><code>#f6f6f6</code></div></td><td><div class="v"><span class="sw" style="background:#18202c"></span><code>#18202c</code></div></td></tr><tr><td><code>--dui-tab-bg-hover</code><div class="d">탭 hover 바탕</div></td><td><div class="v"><span class="sw" style="background:#ebebeb"></span><code>#ebebeb</code></div></td><td><div class="v"><span class="sw" style="background:#2f3b4f"></span><code>#2f3b4f</code></div></td></tr><tr><td><code>--dui-tooltip-bg</code><div class="d">툴팁 바탕</div></td><td><div class="v"><span class="sw" style="background:#3e3e3e"></span><code>#3e3e3e</code></div></td><td><div class="v"><span class="sw" style="background:#444444"></span><code>#444444</code></div></td></tr><tr><td><code>--dui-tooltip-color</code><div class="d">툴팁 글자색</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td></tr></tbody></table></div>
+<h4>선택 · 강조 보조</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-selected-border-color</code><div class="d">선택 셀 테두리</div></td><td><div class="v"><span class="sw" style="background:#4762fa"></span><code>#4762fa</code></div></td><td><div class="v"><span class="sw" style="background:#47dcfa"></span><code>#47dcfa</code></div></td></tr><tr><td><code>--dui-item-check-color</code><div class="d">체크된 항목 / 링크 강조색</div></td><td><div class="v"><span class="sw" style="background:#1a73e8"></span><code>#1a73e8</code></div></td><td><div class="v"><span class="sw" style="background:#68a9ff"></span><code>#68a9ff</code></div></td></tr><tr><td><code>--dui-search-match-color</code><div class="d">검색 일치 글자색</div></td><td><div class="v"><span class="sw" style="background:#0040ff"></span><code>#0040ff</code></div></td><td><div class="v"><span class="sw" style="background:#1fa0ff"></span><code>#1fa0ff</code></div></td></tr><tr><td><code>--dui-accent-text-color</code><div class="d">강조 글자색 (추가 항목 등)</div></td><td><div class="v"><span class="sw" style="background:#5970f5"></span><code>#5970f5</code></div></td><td><div class="v"><span class="sw" style="background:#68e4f9"></span><code>#68e4f9</code></div></td></tr><tr><td><code>--dui-today-bg</code><div class="d">오늘 날짜 바탕</div></td><td><div class="v"><span class="sw" style="background:#a9d5ff"></span><code>#a9d5ff</code></div></td><td><div class="v"><span class="sw" style="background:#5660d9"></span><code>#5660d9</code></div></td></tr><tr><td><code>--dui-sunday-color</code><div class="d">일요일 글자색</div></td><td><div class="v"><span class="sw" style="background:#f00d0d"></span><code>#f00d0d</code></div></td><td><div class="v"><span class="sw" style="background:#f00d0d"></span><code>#f00d0d</code></div></td></tr></tbody></table></div>
+<h4>브랜드</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-primary-color</code><div class="d">브랜드 색</div></td><td><div class="v"><span class="sw" style="background:#2563eb"></span><code>#2563eb</code></div></td><td><div class="v"><span class="sw" style="background:#2563eb"></span><code>#2563eb</code></div></td></tr><tr><td><code>--dui-primary-hover-color</code><div class="d">브랜드 색 hover</div></td><td><div class="v"><span class="sw" style="background:#1d4ed8"></span><code>#1d4ed8</code></div></td><td><div class="v"><span class="sw" style="background:#1d4ed8"></span><code>#1d4ed8</code></div></td></tr><tr><td><code>--dui-primary-font-color</code><div class="d">primary 바탕 위의 글자색</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td></tr><tr><td><code>--dui-primary-soft-bg</code><div class="d">브랜드 색의 연한 바탕</div></td><td><div class="v"><span class="sw" style="background:rgba(37, 99, 235, 0.1)"></span><code>rgba(37, 99, 235, 0.1)</code></div></td><td><div class="v"><span class="sw" style="background:rgba(37, 99, 235, 0.1)"></span><code>rgba(37, 99, 235, 0.1)</code></div></td></tr><tr><td><code>--dui-danger-color</code><div class="d">위험 동작의 채움 색 (삭제 버튼 등)</div></td><td><div class="v"><span class="sw" style="background:#dc2626"></span><code>#dc2626</code></div></td><td><div class="v"><span class="sw" style="background:#dc2626"></span><code>#dc2626</code></div></td></tr></tbody></table></div>
+<h4>오류 · 검증</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-error-color</code><div class="d">오류 글자색</div></td><td><div class="v"><span class="sw" style="background:#b42318"></span><code>#b42318</code></div></td><td><div class="v"><span class="sw" style="background:#ff8a80"></span><code>#ff8a80</code></div></td></tr><tr><td><code>--dui-error-bg</code><div class="d">오류 바탕</div></td><td><div class="v"><span class="sw" style="background:#fff4f4"></span><code>#fff4f4</code></div></td><td><div class="v"><span class="sw" style="background:#3a2326"></span><code>#3a2326</code></div></td></tr><tr><td><code>--dui-error-border-color</code><div class="d">오류 테두리</div></td><td><div class="v"><span class="sw" style="background:#f0b4b4"></span><code>#f0b4b4</code></div></td><td><div class="v"><span class="sw" style="background:#6b3036"></span><code>#6b3036</code></div></td></tr><tr><td><code>--dui-required-color</code><div class="d">필수 표시 색</div></td><td><div class="v"><span class="sw" style="background:#ff4136"></span><code>#ff4136</code></div></td><td><div class="v"><span class="sw" style="background:#ff9b9b"></span><code>#ff9b9b</code></div></td></tr><tr><td><code>--dui-invalid-font-color</code><div class="d">유효성 오류 글자색</div></td><td><div class="v"><span class="sw" style="background:#ff4136"></span><code>#ff4136</code></div></td><td><div class="v"><span class="sw" style="background:#ff9b9b"></span><code>#ff9b9b</code></div></td></tr><tr><td><code>--dui-invalid-border-color</code><div class="d">유효성 오류 테두리</div></td><td><div class="v"><span class="sw" style="background:#ffb6b4"></span><code>#ffb6b4</code></div></td><td><div class="v"><span class="sw" style="background:#ff5e5e"></span><code>#ff5e5e</code></div></td></tr><tr><td><code>--dui-invalid-bg</code><div class="d">유효성 오류 바탕</div></td><td><div class="v"><span class="sw" style="background:#ffdddd"></span><code>#ffdddd</code></div></td><td><div class="v"><span class="sw" style="background:#3a1f1f"></span><code>#3a1f1f</code></div></td></tr></tbody></table></div>
+<h4>알림 상태</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-alert-success-color</code><div class="d">알림 성공</div></td><td><div class="v"><span class="sw" style="background:#0abf30"></span><code>#0abf30</code></div></td><td><div class="v"><span class="sw" style="background:#0abf30"></span><code>#0abf30</code></div></td></tr><tr><td><code>--dui-alert-error-color</code><div class="d">알림 오류</div></td><td><div class="v"><span class="sw" style="background:#e24d4c"></span><code>#e24d4c</code></div></td><td><div class="v"><span class="sw" style="background:#e24d4c"></span><code>#e24d4c</code></div></td></tr><tr><td><code>--dui-alert-warning-color</code><div class="d">알림 경고</div></td><td><div class="v"><span class="sw" style="background:#e9bd0c"></span><code>#e9bd0c</code></div></td><td><div class="v"><span class="sw" style="background:#e9bd0c"></span><code>#e9bd0c</code></div></td></tr><tr><td><code>--dui-alert-info-color</code><div class="d">알림 정보</div></td><td><div class="v"><span class="sw" style="background:#3498db"></span><code>#3498db</code></div></td><td><div class="v"><span class="sw" style="background:#3498db"></span><code>#3498db</code></div></td></tr></tbody></table></div>
+<h4>체크 · 스위치</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-check-bg</code><div class="d">체크 / 스위치 꺼짐 바탕</div></td><td><div class="v"><span class="sw" style="background:#dfdfdf"></span><code>#dfdfdf</code></div></td><td><div class="v"><span class="sw" style="background:#979797"></span><code>#979797</code></div></td></tr><tr><td><code>--dui-check-active-bg</code><div class="d">체크 / 스위치 켜짐 바탕</div></td><td><div class="v"><span class="sw" style="background:#4caf50"></span><code>#4caf50</code></div></td><td><div class="v"><span class="sw" style="background:#00c1ff"></span><code>#00c1ff</code></div></td></tr><tr><td><code>--dui-check-mark-color</code><div class="d">체크 표시 색</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#4e4e4e"></span><code>#4e4e4e</code></div></td></tr><tr><td><code>--dui-check-indeterminate-bg</code><div class="d">중간 상태 표시 색</div></td><td><div class="v"><span class="sw" style="background:#686868"></span><code>#686868</code></div></td><td><div class="v"><span class="sw" style="background:#fffbfb"></span><code>#fffbfb</code></div></td></tr></tbody></table></div>
+<h4>스크롤</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-scroll-bg</code><div class="d">스크롤 영역 바탕</div></td><td><div class="v"><span class="sw" style="background:#f7f7f7"></span><code>#f7f7f7</code></div></td><td><div class="v"><span class="sw" style="background:#18202c"></span><code>#18202c</code></div></td></tr><tr><td><code>--dui-scroll-track-bg</code><div class="d">스크롤 트랙</div></td><td><div class="v"><span class="sw" style="background:#f7f7f7"></span><code>#f7f7f7</code></div></td><td><div class="v"><span class="sw" style="background:#18202c"></span><code>#18202c</code></div></td></tr><tr><td><code>--dui-scroll-thumb-bg</code><div class="d">스크롤 막대</div></td><td><div class="v"><span class="sw" style="background:#a5a5a5"></span><code>#a5a5a5</code></div></td><td><div class="v"><span class="sw" style="background:#3a4456"></span><code>#3a4456</code></div></td></tr><tr><td><code>--dui-scroll-thumb-hover-bg</code><div class="d">스크롤 막대 hover</div></td><td><div class="v"><span class="sw" style="background:#696969"></span><code>#696969</code></div></td><td><div class="v"><span class="sw" style="background:#4a5466"></span><code>#4a5466</code></div></td></tr><tr><td><code>--dui-scroll-button-bg</code><div class="d">스크롤 버튼</div></td><td><div class="v"><span class="sw" style="background:#c5c3c3"></span><code>#c5c3c3</code></div></td><td><div class="v"><span class="sw" style="background:#2a3444"></span><code>#2a3444</code></div></td></tr></tbody></table></div>
+<h4>아이콘</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-icon-stroke-color</code><div class="d">아이콘 선 색 (바탕 없음)</div></td><td><div class="v"><span class="sw" style="background:#5a5858"></span><code>#5a5858</code></div></td><td><div class="v"><span class="sw" style="background:#fffbfb"></span><code>#fffbfb</code></div></td></tr><tr><td><code>--dui-icon-fill-stroke-color</code><div class="d">아이콘 선 색 (채워진 바탕 위)</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#1a1a1a"></span><code>#1a1a1a</code></div></td></tr><tr><td><code>--dui-icon-stroke-on-color</code><div class="d">색 버튼 위 아이콘 선</div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td><td><div class="v"><span class="sw" style="background:#ffffff"></span><code>#ffffff</code></div></td></tr><tr><td><code>--dui-icon-fill-stroke-on-color</code><div class="d">색 버튼 위 아이콘 채움</div></td><td><div class="v"><span class="sw" style="background:#494949"></span><code>#494949</code></div></td><td><div class="v"><span class="sw" style="background:#494949"></span><code>#494949</code></div></td></tr><tr><td><code>--dui-empty-icon-color</code><div class="d">빈 상태 아이콘</div></td><td><div class="v"><span class="sw" style="background:#adabab"></span><code>#adabab</code></div></td><td><div class="v"><span class="sw" style="background:#888888"></span><code>#888888</code></div></td></tr></tbody></table></div>
+<h4>오버레이 · 그림자</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-overlay-bg</code><div class="d">모달 오버레이</div></td><td><div class="v"><span class="sw" style="background:rgba(15, 23, 42, 0.45)"></span><code>rgba(15, 23, 42, 0.45)</code></div></td><td><div class="v"><span class="sw" style="background:rgba(0, 0, 0, 0.6)"></span><code>rgba(0, 0, 0, 0.6)</code></div></td></tr><tr><td><code>--dui-shadow</code><div class="d">일반 그림자</div></td><td><div class="v"><span class="sw sh" style="box-shadow:0 2px 8px rgba(0, 0, 0, 0.15)"></span><code>0 2px 8px rgba(0, 0, 0, 0.15)</code></div></td><td><div class="v"><span class="sw sh" style="box-shadow:0 2px 8px rgba(0, 0, 0, 0.45)"></span><code>0 2px 8px rgba(0, 0, 0, 0.45)</code></div></td></tr><tr><td><code>--dui-page-shadow</code><div class="d">페이지 / 카드 그림자</div></td><td><div class="v"><span class="sw sh" style="box-shadow:0 1px 3px rgba(15, 23, 42, 0.12)"></span><code>0 1px 3px rgba(15, 23, 42, 0.12)</code></div></td><td><div class="v"><span class="sw sh" style="box-shadow:0 1px 4px rgba(0, 0, 0, 0.5)"></span><code>0 1px 4px rgba(0, 0, 0, 0.5)</code></div></td></tr></tbody></table></div>
+<h4>차트 · 막대</h4><div class="tw"><table class="tt"><thead><tr><th>변수</th><th>light</th><th>dark</th></tr></thead><tbody><tr><td><code>--dui-bar-positive-bg</code><div class="d">막대 차트 양수</div></td><td><div class="v"><span class="sw" style="background:#77c0fc"></span><code>#77c0fc</code></div></td><td><div class="v"><span class="sw" style="background:#77c0fc"></span><code>#77c0fc</code></div></td></tr><tr><td><code>--dui-bar-negative-bg</code><div class="d">막대 차트 음수</div></td><td><div class="v"><span class="sw" style="background:#ff8989"></span><code>#ff8989</code></div></td><td><div class="v"><span class="sw" style="background:#ff8989"></span><code>#ff8989</code></div></td></tr></tbody></table></div>
+
+<h2 id="tokens">디자인 토큰</h2>
+<p>SCSS 변수입니다. 빌드 시점에 값이 결정되므로 값을 바꾸면 해당 패키지를 다시 빌드해야 합니다. 런타임에 바뀌어야 하는 값(색, 그림자)은 위의 테마 변수를 사용합니다.</p>
+<h4 id="tok-colors">색상 팔레트</h4><p>원시 색상 값입니다. 컴포넌트에서는 가능하면 위의 테마 변수(<code>themed()</code>)를 쓰고, 팔레트는 테마를 정의하거나 테마와 무관한 고정 색이 필요할 때만 씁니다.</p><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>미리보기</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$white</code></td><td><code>#ffffff</code></td><td><span class="sw" style="background:#ffffff"></span></td><td class="d"></td></tr><tr><td><code>$black</code></td><td><code>#000000</code></td><td><span class="sw" style="background:#000000"></span></td><td class="d"></td></tr><tr><td><code>$gray-50</code></td><td><code>#f9f9f9</code></td><td><span class="sw" style="background:#f9f9f9"></span></td><td class="d">cell-bg-linenumber</td></tr><tr><td><code>$gray-100</code></td><td><code>#f3f3f3</code></td><td><span class="sw" style="background:#f3f3f3"></span></td><td class="d">cell-bg-hover</td></tr><tr><td><code>$gray-150</code></td><td><code>#f0f0f0</code></td><td><span class="sw" style="background:#f0f0f0"></span></td><td class="d">body-bg-thin</td></tr><tr><td><code>$gray-200</code></td><td><code>#ebebeb</code></td><td><span class="sw" style="background:#ebebeb"></span></td><td class="d">disabled-bg / tab-bg-hover</td></tr><tr><td><code>$gray-250</code></td><td><code>#e3e3e3</code></td><td><span class="sw" style="background:#e3e3e3"></span></td><td class="d">button-bg-hover</td></tr><tr><td><code>$gray-300</code></td><td><code>#d2d2d2</code></td><td><span class="sw" style="background:#d2d2d2"></span></td><td class="d">body-bg-hover</td></tr><tr><td><code>$gray-400</code></td><td><code>#cdcdcd</code></td><td><span class="sw" style="background:#cdcdcd"></span></td><td class="d">border-color</td></tr><tr><td><code>$gray-450</code></td><td><code>#b9bdc1</code></td><td><span class="sw" style="background:#b9bdc1"></span></td><td class="d">border-thick-color</td></tr><tr><td><code>$gray-500</code></td><td><code>#a5a5a5</code></td><td><span class="sw" style="background:#a5a5a5"></span></td><td class="d">scroll-thumb-bg</td></tr><tr><td><code>$gray-600</code></td><td><code>#686868</code></td><td><span class="sw" style="background:#686868"></span></td><td class="d">font-color</td></tr><tr><td><code>$gray-700</code></td><td><code>#3a3d41</code></td><td><span class="sw" style="background:#3a3d41"></span></td><td class="d">font-hover-color</td></tr><tr><td><code>$gray-900</code></td><td><code>#212529</code></td><td><span class="sw" style="background:#212529"></span></td><td class="d">input-color</td></tr><tr><td><code>$dark-100</code></td><td><code>#e0e0e0</code></td><td><span class="sw" style="background:#e0e0e0"></span></td><td class="d">font-color</td></tr><tr><td><code>$dark-200</code></td><td><code>#979797</code></td><td><span class="sw" style="background:#979797"></span></td><td class="d">check-bg</td></tr><tr><td><code>$dark-300</code></td><td><code>#727272</code></td><td><span class="sw" style="background:#727272"></span></td><td class="d">button-bg-hover</td></tr><tr><td><code>$dark-400</code></td><td><code>#585858</code></td><td><span class="sw" style="background:#585858"></span></td><td class="d">border-color</td></tr><tr><td><code>$dark-500</code></td><td><code>#444444</code></td><td><span class="sw" style="background:#444444"></span></td><td class="d">tooltip-bg / body-bg-thin</td></tr><tr><td><code>$dark-600</code></td><td><code>#333333</code></td><td><span class="sw" style="background:#333333"></span></td><td class="d">scroll-button-bg</td></tr><tr><td><code>$dark-700</code></td><td><code>#2c2c2c</code></td><td><span class="sw" style="background:#2c2c2c"></span></td><td class="d">tab-bg / summary-bg</td></tr><tr><td><code>$dark-800</code></td><td><code>#2a2a2a</code></td><td><span class="sw" style="background:#2a2a2a"></span></td><td class="d">input-bg</td></tr><tr><td><code>$dark-850</code></td><td><code>#1e1e1e</code></td><td><span class="sw" style="background:#1e1e1e"></span></td><td class="d">scroll-bg</td></tr><tr><td><code>$dark-900</code></td><td><code>#1a1a1a</code></td><td><span class="sw" style="background:#1a1a1a"></span></td><td class="d">body-bg</td></tr><tr><td><code>$primary</code></td><td><code>#0d6efd</code></td><td><span class="sw" style="background:#0d6efd"></span></td><td class="d">ui-grid .dg-primary</td></tr><tr><td><code>$primary-hover</code></td><td><code>#0b5ed7</code></td><td><span class="sw" style="background:#0b5ed7"></span></td><td class="d"></td></tr><tr><td><code>$accent</code></td><td><code>#2563eb</code></td><td><span class="sw" style="background:#2563eb"></span></td><td class="d">ui-drift / ui-report-studio primary</td></tr><tr><td><code>$accent-soft</code></td><td><code>rgba(37, 99, 235, 0.08)</code></td><td><span class="sw" style="background:rgba(37, 99, 235, 0.08)"></span></td><td class="d">report-studio placeholder-bg</td></tr><tr><td><code>$link</code></td><td><code>#1a73e8</code></td><td><span class="sw" style="background:#1a73e8"></span></td><td class="d">ui-grid item-check-color (light)</td></tr><tr><td><code>$link-dark</code></td><td><code>#68a9ff</code></td><td><span class="sw" style="background:#68a9ff"></span></td><td class="d">item-check-color (dark)</td></tr><tr><td><code>$selection</code></td><td><code>#337ab7</code></td><td><span class="sw" style="background:#337ab7"></span></td><td class="d">ui-tree / ui-multiSelect body-active-bg</td></tr><tr><td><code>$selection-border</code></td><td><code>#4762fa</code></td><td><span class="sw" style="background:#4762fa"></span></td><td class="d">ui-grid cell-selection-border (light)</td></tr><tr><td><code>$selection-border-dark</code></td><td><code>#47dcfa</code></td><td><span class="sw" style="background:#47dcfa"></span></td><td class="d"></td></tr><tr><td><code>$selection-bg</code></td><td><code>#e9faff</code></td><td><span class="sw" style="background:#e9faff"></span></td><td class="d">ui-grid cell-bg-selection (light)</td></tr><tr><td><code>$selection-bg-dark</code></td><td><code>#264f78</code></td><td><span class="sw" style="background:#264f78"></span></td><td class="d"></td></tr><tr><td><code>$success</code></td><td><code>#0abf30</code></td><td><span class="sw" style="background:#0abf30"></span></td><td class="d"></td></tr><tr><td><code>$error</code></td><td><code>#e24d4c</code></td><td><span class="sw" style="background:#e24d4c"></span></td><td class="d"></td></tr><tr><td><code>$warning</code></td><td><code>#e9bd0c</code></td><td><span class="sw" style="background:#e9bd0c"></span></td><td class="d"></td></tr><tr><td><code>$info</code></td><td><code>#3498db</code></td><td><span class="sw" style="background:#3498db"></span></td><td class="d"></td></tr><tr><td><code>$btn-success</code></td><td><code>#198754</code></td><td><span class="sw" style="background:#198754"></span></td><td class="d"></td></tr><tr><td><code>$btn-danger</code></td><td><code>#dc3545</code></td><td><span class="sw" style="background:#dc3545"></span></td><td class="d"></td></tr><tr><td><code>$btn-warning</code></td><td><code>#ffc107</code></td><td><span class="sw" style="background:#ffc107"></span></td><td class="d"></td></tr><tr><td><code>$btn-info</code></td><td><code>#0dcaf0</code></td><td><span class="sw" style="background:#0dcaf0"></span></td><td class="d"></td></tr><tr><td><code>$btn-secondary</code></td><td><code>#6c757d</code></td><td><span class="sw" style="background:#6c757d"></span></td><td class="d"></td></tr><tr><td><code>$danger</code></td><td><code>#d9534f</code></td><td><span class="sw" style="background:#d9534f"></span></td><td class="d">status-danger-color (light), form color-danger</td></tr><tr><td><code>$danger-dark</code></td><td><code>#ff6b6b</code></td><td><span class="sw" style="background:#ff6b6b"></span></td><td class="d"></td></tr><tr><td><code>$required</code></td><td><code>#ff4136</code></td><td><span class="sw" style="background:#ff4136"></span></td><td class="d">required / invalid-font-color (light)</td></tr><tr><td><code>$required-dark</code></td><td><code>#ff9b9b</code></td><td><span class="sw" style="background:#ff9b9b"></span></td><td class="d"></td></tr><tr><td><code>$invalid-border</code></td><td><code>#ffb6b4</code></td><td><span class="sw" style="background:#ffb6b4"></span></td><td class="d"></td></tr><tr><td><code>$invalid-border-dark</code></td><td><code>#ff5e5e</code></td><td><span class="sw" style="background:#ff5e5e"></span></td><td class="d"></td></tr><tr><td><code>$invalid-bg</code></td><td><code>#ffdddd</code></td><td><span class="sw" style="background:#ffdddd"></span></td><td class="d">#fdd</td></tr><tr><td><code>$invalid-bg-dark</code></td><td><code>#3a1f1f</code></td><td><span class="sw" style="background:#3a1f1f"></span></td><td class="d"></td></tr><tr><td><code>$overlay</code></td><td><code>rgba(15, 23, 42, 0.45)</code></td><td><span class="sw" style="background:rgba(15, 23, 42, 0.45)"></span></td><td class="d">report-studio overlay-bg</td></tr><tr><td><code>$shadow-color</code></td><td><code>rgba(15, 23, 42, 0.12)</code></td><td><span class="sw" style="background:rgba(15, 23, 42, 0.12)"></span></td><td class="d"></td></tr><tr><td><code>$icon-stroke</code></td><td><code>#5a5858</code></td><td><span class="sw" style="background:#5a5858"></span></td><td class="d"></td></tr><tr><td><code>$icon-stroke-dark</code></td><td><code>#fffbfb</code></td><td><span class="sw" style="background:#fffbfb"></span></td><td class="d"></td></tr><tr><td><code>$icon-stroke-on-color</code></td><td><code>#ffffff</code></td><td><span class="sw" style="background:#ffffff"></span></td><td class="d"></td></tr><tr><td><code>$icon-fill-stroke-on-color</code></td><td><code>#494949</code></td><td><span class="sw" style="background:#494949"></span></td><td class="d"></td></tr></tbody></table></div>
+<h4 id="tok-spacing">간격</h4><p>4px 단위 스케일. <code>style.space(md)</code> 함수로도 조회할 수 있습니다.</p><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>미리보기</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$spacing-0</code></td><td><code>0</code></td><td></td><td class="d"></td></tr><tr><td><code>$spacing-2xs</code></td><td><code>2px</code></td><td><span class="bar" style="width:2px"></span></td><td class="d"></td></tr><tr><td><code>$spacing-xs</code></td><td><code>4px</code></td><td><span class="bar" style="width:4px"></span></td><td class="d"></td></tr><tr><td><code>$spacing-sm</code></td><td><code>8px</code></td><td><span class="bar" style="width:8px"></span></td><td class="d"></td></tr><tr><td><code>$spacing-md</code></td><td><code>12px</code></td><td><span class="bar" style="width:12px"></span></td><td class="d"></td></tr><tr><td><code>$spacing-lg</code></td><td><code>16px</code></td><td><span class="bar" style="width:16px"></span></td><td class="d"></td></tr><tr><td><code>$spacing-xl</code></td><td><code>24px</code></td><td><span class="bar" style="width:24px"></span></td><td class="d"></td></tr><tr><td><code>$spacing-2xl</code></td><td><code>32px</code></td><td><span class="bar" style="width:32px"></span></td><td class="d"></td></tr><tr><td><code>$field-margin-top</code></td><td><code>10px</code></td><td><span class="bar" style="width:10px"></span></td><td class="d"></td></tr><tr><td><code>$field-padding-top</code></td><td><code>3px</code></td><td><span class="bar" style="width:3px"></span></td><td class="d"></td></tr><tr><td><code>$field-padding-right</code></td><td><code>15px</code></td><td><span class="bar" style="width:15px"></span></td><td class="d"></td></tr><tr><td><code>$control-padding</code></td><td><code>0 8px 0 5px</code></td><td></td><td class="d"></td></tr><tr><td><code>$control-padding-button</code></td><td><code>0 10px</code></td><td></td><td class="d"></td></tr></tbody></table></div>
+<h4 id="tok-typography">타이포그래피</h4><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>미리보기</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$font-family</code></td><td><code>-apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif</code></td><td></td><td class="d"></td></tr><tr><td><code>$font-family-mono</code></td><td><code>Consolas, 'D2Coding', monospace</code></td><td></td><td class="d"></td></tr><tr><td><code>$font-size-2xs</code></td><td><code>11px</code></td><td><span style="font-size:11px">가나다 Abc</span></td><td class="d">ui-components $font-size-tiny</td></tr><tr><td><code>$font-size-xs</code></td><td><code>12px</code></td><td><span style="font-size:12px">가나다 Abc</span></td><td class="d">$font-size-small / $control-font-size / ui-grid 기본</td></tr><tr><td><code>$font-size-sm</code></td><td><code>13px</code></td><td><span style="font-size:13px">가나다 Abc</span></td><td class="d">ui-components / report-studio 기본</td></tr><tr><td><code>$font-size-md</code></td><td><code>14px</code></td><td><span style="font-size:14px">가나다 Abc</span></td><td class="d">ui-form font-size</td></tr><tr><td><code>$font-size-lg</code></td><td><code>16px</code></td><td><span style="font-size:16px">가나다 Abc</span></td><td class="d">ui-form font-size-lg</td></tr><tr><td><code>$font-weight-normal</code></td><td><code>400</code></td><td></td><td class="d"></td></tr><tr><td><code>$font-weight-medium</code></td><td><code>500</code></td><td></td><td class="d"></td></tr><tr><td><code>$font-weight-bold</code></td><td><code>700</code></td><td></td><td class="d"></td></tr><tr><td><code>$line-height-tight</code></td><td><code>1.2</code></td><td></td><td class="d">컨트롤 (ui-grid / ui-form)</td></tr><tr><td><code>$line-height-base</code></td><td><code>1.5</code></td><td></td><td class="d">ui-form line-height-lg</td></tr><tr><td><code>$line-height-grid</code></td><td><code>1.6</code></td><td></td><td class="d">ui-grid 전역 `line-height: 1.6em`</td></tr></tbody></table></div>
+<h4 id="tok-borders">테두리 · 모서리</h4><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>미리보기</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$border-width</code></td><td><code>1px</code></td><td></td><td class="d"></td></tr><tr><td><code>$border-width-thick</code></td><td><code>2px</code></td><td></td><td class="d"></td></tr><tr><td><code>$radius-sm</code></td><td><code>3px</code></td><td><span class="rad" style="border-radius:3px"></span></td><td class="d">ui-components / report-studio $radius</td></tr><tr><td><code>$radius-md</code></td><td><code>4px</code></td><td><span class="rad" style="border-radius:4px"></span></td><td class="d">컨트롤 (ui-grid button / input)</td></tr><tr><td><code>$radius-lg</code></td><td><code>6px</code></td><td><span class="rad" style="border-radius:6px"></span></td><td class="d">report-studio $radius-large, ui-drift $drift-radius</td></tr><tr><td><code>$radius-pill</code></td><td><code>9999px</code></td><td><span class="rad" style="border-radius:9999px"></span></td><td class="d"></td></tr><tr><td><code>$radius-circle</code></td><td><code>50%</code></td><td><span class="rad" style="border-radius:50%"></span></td><td class="d"></td></tr></tbody></table></div>
+<h4 id="tok-shadows">그림자</h4><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>미리보기</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$shadow-sm</code></td><td><code>0 4px 6px rgba(0, 0, 0, 0.1)</code></td><td><span class="sw sh" style="box-shadow:0 4px 6px rgba(0, 0, 0, 0.1)"></span></td><td class="d"></td></tr><tr><td><code>$shadow-page</code></td><td><code>0 1px 3px rgba(15, 23, 42, 0.12)</code></td><td><span class="sw sh" style="box-shadow:0 1px 3px rgba(15, 23, 42, 0.12)"></span></td><td class="d"></td></tr><tr><td><code>$shadow-md</code></td><td><code>0 6px 18px rgba(15, 23, 42, 0.2)</code></td><td><span class="sw sh" style="box-shadow:0 6px 18px rgba(15, 23, 42, 0.2)"></span></td><td class="d"></td></tr><tr><td><code>$shadow-lg</code></td><td><code>0 8px 24px rgba(0, 0, 0, 0.22)</code></td><td><span class="sw sh" style="box-shadow:0 8px 24px rgba(0, 0, 0, 0.22)"></span></td><td class="d"></td></tr><tr><td><code>$shadow-popup</code></td><td><code>0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)</code></td><td><span class="sw sh" style="box-shadow:0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)"></span></td><td class="d"></td></tr><tr><td><code>$shadow-focus-ring</code></td><td><code>0 0 0 2px rgba(37, 99, 235, 0.25)</code></td><td><span class="sw sh" style="box-shadow:0 0 0 2px rgba(37, 99, 235, 0.25)"></span></td><td class="d"></td></tr></tbody></table></div>
+<h4 id="tok-z-index">z-index 레이어</h4><p>값이 같은 기존 숫자(1 / 10 / 100 / 1000 / 10000)를 의미 단위로 정리했습니다. <code>style.z(modal)</code> 로도 조회합니다.</p><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$z-base</code></td><td><code>0</code></td><td class="d"></td></tr><tr><td><code>$z-raised</code></td><td><code>1</code></td><td class="d"></td></tr><tr><td><code>$z-raised-2</code></td><td><code>2</code></td><td class="d"></td></tr><tr><td><code>$z-raised-3</code></td><td><code>3</code></td><td class="d"></td></tr><tr><td><code>$z-sticky</code></td><td><code>10</code></td><td class="d"></td></tr><tr><td><code>$z-overlay-local</code></td><td><code>100</code></td><td class="d"></td></tr><tr><td><code>$z-dropdown</code></td><td><code>1000</code></td><td class="d"></td></tr><tr><td><code>$z-modal</code></td><td><code>10000</code></td><td class="d"></td></tr><tr><td><code>$z-toast</code></td><td><code>10000</code></td><td class="d"></td></tr><tr><td><code>$z-contextmenu</code></td><td><code>10000</code></td><td class="d"></td></tr><tr><td><code>$z-drag-ghost</code></td><td><code>2147483000</code></td><td class="d"></td></tr></tbody></table></div>
+<h4 id="tok-sizes">크기</h4><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$control-height</code></td><td><code>28px</code></td><td class="d"></td></tr><tr><td><code>$control-radius</code></td><td><code>4px</code></td><td class="d"></td></tr><tr><td><code>$control-font-size</code></td><td><code>12px</code></td><td class="d"></td></tr><tr><td><code>$line-height-px</code></td><td><code>30px</code></td><td class="d">ui-grid $line_height</td></tr><tr><td><code>$scrollbar-size</code></td><td><code>12px</code></td><td class="d"></td></tr><tr><td><code>$scrollbar-size-thin</code></td><td><code>8px</code></td><td class="d"></td></tr><tr><td><code>$touch-target</code></td><td><code>44px</code></td><td class="d"></td></tr><tr><td><code>$icon-size-sm</code></td><td><code>16px</code></td><td class="d"></td></tr><tr><td><code>$icon-size-md</code></td><td><code>20px</code></td><td class="d"></td></tr><tr><td><code>$icon-size-lg</code></td><td><code>24px</code></td><td class="d"></td></tr></tbody></table></div>
+<h4 id="tok-motion">모션</h4><div class="tw"><table class="tt"><thead><tr><th>SCSS 변수</th><th>값</th><th>출처 / 용도</th></tr></thead><tbody><tr><td><code>$duration-fast</code></td><td><code>0.1s</code></td><td class="d">ui-grid choice, report-studio preview (0.12s)</td></tr><tr><td><code>$duration-base</code></td><td><code>0.2s</code></td><td class="d">ui-grid dropdown, ui-datetimepicker fade</td></tr><tr><td><code>$duration-slow</code></td><td><code>0.3s</code></td><td class="d">ui-grid switch, ui-dialog / ui-toast fade</td></tr><tr><td><code>$ease-standard</code></td><td><code>ease</code></td><td class="d"></td></tr><tr><td><code>$ease-out</code></td><td><code>cubic-bezier(0.22, 0.8, 0.26, 1)</code></td><td class="d">report-studio properties panel</td></tr><tr><td><code>$ease-move</code></td><td><code>cubic-bezier(0.2, 0.8, 0.2, 1)</code></td><td class="d">ui-drift 이동 애니메이션</td></tr></tbody></table></div>
+
+<h2 id="api">API 레퍼런스</h2>
+<p class="d">이 표는 소스(<code>src/</code>)와 대조해서 생성됩니다. 소스에 없는 이름이 있으면 가이드 빌드가 실패합니다.</p>
+<h4 id="api-abstracts">@daracl/ui-style/abstracts</h4><div class="tw"><table class="tt"><thead><tr><th>이름</th><th>설명</th></tr></thead><tbody><tr><td><span class="tag function">@function</span><code>space($key)</code></td><td class="d">간격 토큰 조회. <code>space(md)</code> → 12px</td></tr><tr><td><span class="tag function">@function</span><code>radius($key)</code></td><td class="d">모서리 토큰 조회. <code>radius(md)</code> → 4px</td></tr><tr><td><span class="tag function">@function</span><code>shadow($key)</code></td><td class="d">그림자 토큰 조회</td></tr><tr><td><span class="tag function">@function</span><code>font-size($key)</code></td><td class="d">글자 크기 토큰 조회</td></tr><tr><td><span class="tag function">@function</span><code>z($layer, $offset: 0)</code></td><td class="d">z-index 조회. <code>z(modal, 1)</code> → 10001</td></tr><tr><td><span class="tag function">@function</span><code>token($name, $fallback: null, $prefix)</code></td><td class="d">테마 변수 참조 <code>var(--dui-…)</code>. fallback 이 없으므로 컴포넌트에는 <code>themed()</code> 를 권장</td></tr><tr><td><span class="tag function">@function</span><code>css-var-name($name, $prefix)</code></td><td class="d"><code>--dui-border-color</code> 같은 변수 이름 생성</td></tr><tr><td><span class="tag function">@function</span><code>rem($px, $base: 16px)</code></td><td class="d">px → rem</td></tr><tr><td><span class="tag function">@function</span><code>strip-unit($number)</code></td><td class="d">단위 제거</td></tr><tr><td><span class="tag function">@function</span><code>breakpoint($name)</code></td><td class="d">브레이크포인트 값 (sm 720 / md 960 / lg 1280)</td></tr><tr><td><span class="tag mixin">@mixin</span><code>respond-above($name)</code></td><td class="d">지정 너비 이상 미디어쿼리</td></tr><tr><td><span class="tag mixin">@mixin</span><code>respond-below($name)</code></td><td class="d">지정 너비 미만 미디어쿼리</td></tr><tr><td><span class="tag mixin">@mixin</span><code>flex-center($inline: false)</code></td><td class="d">가운데 정렬 flex</td></tr><tr><td><span class="tag mixin">@mixin</span><code>flex-between</code></td><td class="d">양끝 정렬 flex</td></tr><tr><td><span class="tag mixin">@mixin</span><code>flex-column</code></td><td class="d">세로 flex</td></tr><tr><td><span class="tag mixin">@mixin</span><code>absolute-fill</code></td><td class="d">부모를 가득 채우는 absolute</td></tr><tr><td><span class="tag mixin">@mixin</span><code>ellipsis</code></td><td class="d">한 줄 말줄임 (flex 자식에서도 동작하도록 min-width: 0 포함)</td></tr><tr><td><span class="tag mixin">@mixin</span><code>line-clamp($lines: 2)</code></td><td class="d">여러 줄 말줄임</td></tr><tr><td><span class="tag mixin">@mixin</span><code>user-select($value: none)</code></td><td class="d">텍스트 선택 제어 (vendor prefix 포함)</td></tr><tr><td><span class="tag mixin">@mixin</span><code>reduced-motion { … }</code></td><td class="d"><code>prefers-reduced-motion: reduce</code> 에서만 적용</td></tr><tr><td><span class="tag mixin">@mixin</span><code>coarse-pointer { … }</code></td><td class="d">터치 환경에서만 적용</td></tr><tr><td><span class="tag mixin">@mixin</span><code>transition($properties, $duration, $easing)</code></td><td class="d">transition + reduced-motion 대응</td></tr><tr><td><span class="tag mixin">@mixin</span><code>form-control($prefix: dui)</code></td><td class="d">입력 요소 공통 모양 (높이 28px, 테두리, hover / focus / disabled). 색은 <code>themed()</code> 로 연결</td></tr><tr><td><span class="tag mixin">@mixin</span><code>form-button($prefix: dui)</code></td><td class="d">form-control 기반 버튼</td></tr><tr><td><span class="tag mixin">@mixin</span><code>solid-variant($background, $color, $icon-stroke, $icon-fill-stroke)</code></td><td class="d">색이 채워진 버튼 변형. 하위 요소의 글자색과 아이콘 변수까지 함께 지정</td></tr></tbody></table></div>
+<h4 id="api-themes">@daracl/ui-style/themes</h4><div class="tw"><table class="tt"><thead><tr><th>이름</th><th>설명</th></tr></thead><tbody><tr><td><span class="tag function">@function</span><code>themed($name, $prefix: dui, $themes)</code></td><td class="d"><b>컴포넌트 CSS 용.</b> <code>var(--dui-name, light값)</code> 을 만든다. 단독 사용 시에도 light 로 표시됨</td></tr><tr><td><span class="tag function">@function</span><code>get-theme($name, $themes)</code></td><td class="d">테마 맵 조회 (light / dark)</td></tr><tr><td><span class="tag function">@function</span><code>scope-list($scope)</code></td><td class="d">쉼표로 이어진 선택자 문자열을 항목별 목록으로 분리</td></tr><tr><td><span class="tag mixin">@mixin</span><code>theme-vars($map, $prefix: dui)</code></td><td class="d">맵의 모든 키를 CSS 변수로 출력. <code>$prefix: ''</code> 이면 접두사 없는 변수</td></tr><tr><td><span class="tag mixin">@mixin</span><code>theme($name, $prefix, $themes)</code></td><td class="d">이름으로 테마 변수를 출력 (그리드별 테마처럼 한 요소에 직접 지정할 때)</td></tr><tr><td><span class="tag mixin">@mixin</span><code>define-theme($name, $default, $scope, $prefix, $themes)</code></td><td class="d">한 테마를 <code>[data-daracl-theme]</code> 선택자와 함께 출력</td></tr><tr><td><span class="tag mixin">@mixin</span><code>define-themes($scope, $default, $auto-dark, $prefix, $themes)</code></td><td class="d">등록된 모든 테마 출력. <code>$scope</code> 가 쉼표 목록이어도 항목별로 처리. <code>$auto-dark</code> 는 OS 설정 대응</td></tr></tbody></table></div>
+<h4 id="api-base">@daracl/ui-style/base</h4><div class="tw"><table class="tt"><thead><tr><th>이름</th><th>설명</th></tr></thead><tbody><tr><td><span class="tag mixin">@mixin</span><code>reset</code></td><td class="d">컴포넌트 범위의 box-sizing / border-spacing 초기화</td></tr><tr><td><span class="tag mixin">@mixin</span><code>root-typography($prefix, $size)</code></td><td class="d">루트 글꼴 / 글자색</td></tr><tr><td><span class="tag mixin">@mixin</span><code>keyframes-fade($prefix: dui)</code></td><td class="d"><code>@keyframes {prefix}-fade-in / -fade-out</code> 만 출력</td></tr><tr><td><span class="tag mixin">@mixin</span><code>keyframes($prefix: dui)</code></td><td class="d">fade-in / fade-out / spin / slide-out-right 모두 출력</td></tr><tr><td><span class="tag mixin">@mixin</span><code>animate($name, $duration, $easing, $fill, $prefix)</code></td><td class="d">animation 속성 헬퍼 (reduced-motion 대응)</td></tr><tr><td><span class="tag mixin">@mixin</span><code>spinner($size: 21px, $color, $thickness, $prefix)</code></td><td class="d">원형 스피너 (먼저 keyframes 출력 필요)</td></tr></tbody></table></div>
+<h4 id="api-utilities">@daracl/ui-style/utilities</h4><div class="tw"><table class="tt"><thead><tr><th>이름</th><th>설명</th></tr></thead><tbody><tr><td><span class="tag mixin">@mixin</span><code>scrollbar($size, $prefix, $radius)</code></td><td class="d">네이티브 스크롤바 스타일 (scroll-* 테마 변수 사용)</td></tr><tr><td><span class="tag mixin">@mixin</span><code>scrollbar-hidden</code></td><td class="d">스크롤바 숨김</td></tr><tr><td><span class="tag mixin">@mixin</span><code>helpers($prefix: dui)</code></td><td class="d"><code>.dui-hide / -show / -ellipsis / -noselect …</code> 유틸리티 클래스 출력</td></tr><tr><td><span class="tag mixin">@mixin</span><code>variants($prefix: dui)</code></td><td class="d"><code>.dui-primary / -success / -danger …</code> 색 버튼 클래스 출력</td></tr></tbody></table></div>
+
+<h2 id="rules">컴포넌트 작성 규칙</h2>
+<h3>해야 할 것</h3>
+<ul>
+  <li>공통 색은 <code>themes.themed(키)</code> 로 참조합니다. 앱이 어떤 CSS 를 로드했는지와 무관하게 light 로 표시됩니다.</li>
+  <li>프로젝트에서만 쓰는 값은 <b>자기 접두사</b> 변수(<code>--dg-*</code>, <code>--drs-*</code> …)로 두고, <code>define-themes($scope, $prefix: …, $themes: …)</code> 로 light / dark 를 출력합니다.</li>
+  <li>배경과 글자색이 함께 쓰이는 hover / selected / active 는 쌍으로 사용합니다.</li>
+  <li>입력 요소 · 버튼은 <code>form-control</code> / <code>form-button</code> 믹스인을 씁니다. 테두리는 <code>input-border-color</code>, 패널 / 표는 <code>border-color</code>.</li>
+  <li>전역 <code>@keyframes</code> 는 프로젝트 접두사를 붙입니다 (<code>keyframes-fade('프로젝트')</code> → <code>프로젝트-fade-in</code>).</li>
+  <li>z-index 는 토큰을 씁니다 (<code>style.$z-dropdown</code>, <code>style.$z-modal</code> …).</li>
+</ul>
+<h3>하지 말 것</h3>
+<ul>
+  <li>컴포넌트 루트에서 <code>--dui-*</code> 를 다시 선언 — 앱의 테마 / 커스텀 값을 덮어씁니다.</li>
+  <li>접두사 없는 변수(<code>--border-color</code> 등) 선언 — 호스트 페이지의 같은 이름과 충돌합니다.</li>
+  <li><code>helpers</code>, <code>keyframes</code>, <code>define-themes()</code> 를 여러 컴포넌트에서 반복 호출 — 호출할 때마다 CSS 가 출력됩니다. 앱 진입 CSS 에서 한 번만 호출하거나 <code>style.css</code> 를 쓰세요.</li>
+</ul>
+<h3>개별 영역 / 인스턴스 테마</h3>
+<p>한 컴포넌트만 다른 테마로 보여야 한다면 그 요소에서 <code>themes.theme($name)</code> 으로 <code>--dui-*</code> 전체를 지정합니다. (ui-grid 의 <code>dg-dark</code>, ui-components 의 <code>data-theme</code> 가 이 방식입니다.)</p>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-scss">// 영역 단위 테마: 공통(--dui-*) + 전용(--dg-*) 을 함께 지정
+.daracl-grid .dg-layout.dg-dark {
+  @include themes.theme(dark);
+  @include themes.theme(dark, $prefix: 'dg', $themes: $grid-themes);
+}</code></pre></div>
+<h3>JS 에서 색을 읽어야 할 때</h3>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-js">// 값이 비어 있을 수 있으므로(theme-vars.css 미로드) 반드시 fallback 을 둔다
+const c = getComputedStyle(el).getPropertyValue('--dui-bar-positive-bg').trim() || '#77c0fc';</code></pre></div>
+
+<h2 id="projects">프로젝트 적용 현황</h2>
+<div class="tw"><table class="tt"><thead><tr><th>프로젝트</th><th>전용 접두사</th><th>공통 변수 사용</th><th>비고</th></tr></thead><tbody><tr><td><code>ui-grid</code></td><td><code>dg</code></td><td class="d">공통 색상은 <code>--dui-*</code>, 헤더 그라데이션 / 요약 행 / 행 배경 등은 <code>--dg-*</code>. 그리드별 <code>dg-dark</code> 클래스 동작 유지</td><td class="d">막대 차트 색 읽는 변수가 <code>--dui-bar-*</code> 로 변경 (JS)</td></tr><tr><td><code>ui-form</code></td><td><code>df</code></td><td class="d">컨트롤 / 테두리 / 탭 / 필드 색. 간격 / 글꼴 크기는 <code>--df-*</code></td><td class="d"><code>body.dark</code> / <code>.dark</code> 클래스 방식 제거</td></tr><tr><td><code>ui-components</code></td><td><code>dstud / dga / dkp</code></td><td class="d">영역별 전용 값만 <code>--d*-*</code>. 영역별 <code>data-theme</code> 유지</td><td class="d"><code>build:css</code> 는 <code>--load-path=node_modules</code> 필요</td></tr><tr><td><code>ui-report-studio</code></td><td><code>drs</code></td><td class="d">캔버스 / 항목 / 작업 영역 전용 값만 <code>--drs-*</code></td><td class="d">다른 패키지의 dist css 를 포함하므로 grid / components 재빌드 후 확인</td></tr><tr><td><code>ui-role-builder</code></td><td><code>dqu</code></td><td class="d">AND / OR 색은 <code>--dqu-condition-*</code></td><td class="d"></td></tr><tr><td><code>ui-tree</code></td><td>-</td><td class="d">글자 / 배경 / hover / 선택 색</td><td class="d">hover 는 <code>hover-accent-*</code>, 선택은 <code>selected-*</code> 쌍</td></tr><tr><td><code>ui-multiSelect</code></td><td>-</td><td class="d">글자 / 배경 / 테두리 / 버튼 / 페이지네이션</td><td class="d">페이지네이션 hover 글자색 대비 개선</td></tr><tr><td><code>ui-datetimepicker</code></td><td><code>ddtp</code></td><td class="d">선택한 날짜 색만 <code>--ddtp-select-bg</code></td><td class="d">keyframes <code>ddtp-fade-in / -out</code></td></tr><tr><td><code>ui-dialog</code></td><td>-</td><td class="d">글자 / 배경 / 헤더 / 테두리</td><td class="d">keyframes <code>ddlg-fade-*</code>. 색 버튼(variant)은 고정 색 유지</td></tr><tr><td><code>ui-toast</code></td><td>-</td><td class="d">z-index 토큰만 (알림 색은 상태별 고정 색)</td><td class="d"></td></tr><tr><td><code>ui-loading</code></td><td>-</td><td class="d">해당 없음 (SCSS 없음)</td><td class="d"></td></tr></tbody></table></div>
+<h3 id="renames">변수 이름 매핑 (이전 → 현재)</h3>
+<p class="d">기존 프로젝트의 CSS 변수를 덮어써서 쓰던 앱은 아래 이름으로 바꿔야 합니다. 이전 이름의 alias 는 제공하지 않습니다.</p>
+<div class="tw"><table class="tt"><thead><tr><th>이전</th><th>현재 (<code>--dui-</code> 접두사)</th></tr></thead><tbody><tr><td><code>button-bg-hover</code></td><td><code>button-hover-bg</code></td></tr><tr><td><code>item-selected / cell-bg-selection</code></td><td><code>selected-bg</code></td></tr><tr><td><code>cell-selection-border</code></td><td><code>selected-border-color</code></td></tr><tr><td><code>cell-bg-hover</code></td><td><code>hover-bg  (ui-grid 안에서는 --dg-cell-bg-hover 별칭을 거침)</code></td></tr><tr><td><code>bg / panel-bg</code></td><td><code>body-bg</code></td></tr><tr><td><code>disabled-color</code></td><td><code>font-disable-color</code></td></tr><tr><td><code>body-color / btn-color</code></td><td><code>font-color</code></td></tr><tr><td><code>btn-bg-hover</code></td><td><code>button-hover-bg</code></td></tr><tr><td><code>color-danger</code></td><td><code>error-color</code></td></tr><tr><td><code>invalid-background-color</code></td><td><code>invalid-bg</code></td></tr><tr><td><code>tooltip-background</code></td><td><code>tooltip-bg</code></td></tr><tr><td><code>bg-grid-header</code></td><td><code>panel-header-bg</code></td></tr><tr><td><code>icon-color</code></td><td><code>icon-stroke-color</code></td></tr><tr><td><code>item-hover-bg-color / item-focus-bg-color</code></td><td><code>hover-accent-bg</code></td></tr><tr><td><code>item-select-bg-color / item-open-active-bg-color</code></td><td><code>selected-bg</code></td></tr><tr><td><code>body-active-bg / body-active-color</code></td><td><code>active-bg / active-color</code></td></tr><tr><td><code>item-search-font-color</code></td><td><code>search-match-color</code></td></tr><tr><td><code>add-item-color</code></td><td><code>accent-text-color</code></td></tr><tr><td><code>--bar-positive-bg / --bar-negative-bg</code></td><td><code>--dui-bar-positive-bg / --dui-bar-negative-bg</code></td></tr><tr><td><code>status 색 (--success / --error / --warning / --info)</code></td><td><code>alert-success-color / alert-error-color / alert-warning-color / alert-info-color</code></td></tr></tbody></table></div>
+<div class="callout">기준값은 ui-components / ui-report-studio 의 테마입니다. 그 외 프로젝트는 글자색(<code>#222</code>), 테두리, dark 바탕(남색 <code>#1f2836</code>)이 새 기준으로 바뀌었습니다. 값의 출처와 "파생" 표시는 <code>src/themes/_light.scss</code>, <code>_dark.scss</code> 의 주석에 있습니다.</div>
+
+<h2 id="build">빌드 · 배포</h2>
+<div class="code"><button class="copy" type="button" aria-label="복사">복사</button><pre><code class="lang-bash">yarn install
+yarn build        # dist/style.css, theme-vars.css (+ .min.css) 와 이 가이드(docs/guide.html)
+yarn test         # 빌드 + exports 경로, 공개 API, 테마 CSS, load-path, Sass 경고, 가이드 검증</code></pre></div>
+<ul>
+  <li><code>npm pack --dry-run</code> 으로 포함 파일을 확인하고 <code>yarn publish --access public</code> 으로 배포합니다. (<code>prepack</code> 에서 빌드가 실행됩니다.)</li>
+  <li>각 프로젝트는 <code>dependencies</code> 에 <code>"@daracl/ui-style": "^0.0.0"</code> 형태로 추가합니다. 소스 SCSS 를 함께 배포하는 패키지는 사용자가 <code>@daracl/ui-style</code> 을 찾을 수 있어야 하기 때문입니다.</li>
+  <li>공통 값(색, 간격 등)을 바꾸면 이 패키지를 배포한 뒤, SCSS 값에 영향받는 패키지는 다시 빌드 · 배포해야 반영됩니다. CSS 변수 값(테마 색)은 <code>theme-vars.css</code> 만 갱신하면 됩니다.</li>
+</ul>
+<p class="d">이 문서는 <code>scripts/build-guide.mjs</code> 가 생성합니다. 직접 수정하지 마세요. · 생성 시각 2026-10-27</p>
+</main>
+</div>
+<div class="toolbar" role="group" aria-label="이 페이지의 테마">
+  <button type="button" data-mode="auto" aria-pressed="true">auto</button>
+  <button type="button" data-mode="light" aria-pressed="false">light</button>
+  <button type="button" data-mode="dark" aria-pressed="false">dark</button>
+</div>
+<script>
+(function () {
+  var KEY = 'ui-style-guide-theme';
+  var root = document.documentElement;
+  var buttons = document.querySelectorAll('.toolbar button');
+  var label = document.getElementById('cur-theme');
+  function read() { try { return localStorage.getItem(KEY) || 'auto'; } catch (e) { return 'auto'; } }
+  function save(v) { try { localStorage.setItem(KEY, v); } catch (e) { /* 저장소를 쓸 수 없는 환경 */ } }
+  function apply(mode) {
+    if (mode === 'auto') root.removeAttribute('data-daracl-theme'); else root.setAttribute('data-daracl-theme', mode);
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === mode)); });
+    if (label) label.textContent = mode === 'auto' ? 'auto (OS 설정)' : mode;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { var m = b.getAttribute('data-mode'); save(m); apply(m); }); });
+  apply(read());
+
+  document.querySelectorAll('.code .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.parentNode.querySelector('code').textContent;
+      var done = function () { btn.textContent = '복사됨'; setTimeout(function () { btn.textContent = '복사'; }, 1200); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () {});
+      else { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} document.body.removeChild(ta); }
+    });
+  });
+
+  var links = [].slice.call(document.querySelectorAll('nav.side a'));
+  var targets = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  function onScroll() {
+    var y = window.scrollY + 80, idx = 0;
+    targets.forEach(function (t, i) { if (t && t.offsetTop <= y) idx = i; });
+    links.forEach(function (a, i) { a.classList.toggle('active', i === idx); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+</script>
+</body>
+</html>

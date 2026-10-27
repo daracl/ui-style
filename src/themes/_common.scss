@@ -3,11 +3,23 @@
 // 라이트 / 다크에서 값이 같은 의미 토큰.
 // 테마별로 값이 달라져야 하면 _light.scss / _dark.scss 에서 override 한다.
 $theme-common: (
+  // ui-components / ui-report-studio theme-common
   primary-color: tokens.$accent,
-  primary-soft-bg: tokens.$accent-soft,
-  success-color: tokens.$success,
-  warning-color: tokens.$warning,
-  info-color: tokens.$info,
+  primary-hover-color: #1d4ed8,
+  primary-font-color: tokens.$white,
+  primary-soft-bg: rgba(37, 99, 235, 0.1),
+  danger-color: #dc2626, // 채움(fill)용 위험색. 글자용 오류색은 테마별 error-color
+  // 알림(ui-toast / ui-datetimepicker) 상태색. 입력 검증/오류 상태(error-color, invalid-*)와 의미가 달라 따로 둔다.
+  alert-success-color: tokens.$success,
+  alert-error-color: tokens.$error,
+  alert-warning-color: tokens.$warning,
+  alert-info-color: tokens.$info,
+  // 눌림/활성 : ui-tree / ui-multiSelect 의 body-active-*. 두 테마 모두 파란 배경 + 흰 글자 쌍.
+  // (기존 ui-tree dark 는 같은 배경에 어두운 글자 #3a3d41 을 써서 대비가 낮았다.)
+  active-bg: tokens.$selection,
+  active-color: tokens.$white,
+  // ui-datetimepicker 일요일
+  sunday-color: #f00d0d,
   bar-positive-bg: #77c0fc,
   bar-negative-bg: #ff8989,
   tooltip-color: tokens.$white,

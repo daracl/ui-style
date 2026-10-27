@@ -139,3 +139,37 @@
 7. **중복 출력 방지**: `helpers`, `keyframes`, `define-themes` 는 호출할 때마다 CSS 를 출력한다. 여러 컴포넌트 CSS 를 번들하는 경우 **앱 진입 CSS 에서 한 번만** 호출하거나 `dist/style.css` 를 사용한다.
 8. **Sass 해석 방식**: Vite / webpack 은 `@use '@daracl/ui-style/abstracts'` 로, Sass CLI·JS API 의 `NodePackageImporter` 는 `@use 'pkg:@daracl/ui-style/abstracts'` 로 해석한다.
 9. `ui-grid.worktrees` 는 분석에서 제외했다. 원본 `ui-grid` 와 동기화된 상태인지는 확인하지 않았다.
+
+## 8. 토큰 기준: ui-components / ui-report-studio
+
+모든 프로젝트가 ui-style 의 변수를 쓰고, 프로젝트 전용 값만 지역 변수로 둔다는 전제다.
+**ui-components / ui-report-studio 의 테마 값을 기준값으로 삼았다.** (두 프로젝트의 입력 요소 값은 원래 ui-grid 값과 같다.)
+
+### 기준 적용 규칙
+1. 두 프로젝트가 정의한 토큰은 그 값을 그대로 쓴다. 둘이 다르면(dark `button-hover-bg`) report-studio 값을 채택했다.
+2. 두 프로젝트에 없는 토큰은 ui-grid / ui-tree / ui-multiSelect / ui-datetimepicker 값을 쓰고(출처를 주석에 표기), dark 는 남색 바탕에 맞춰 새로 정했다("파생" 표기).
+3. 배경 / 글자는 항상 쌍으로 사용한다: `hover-*`, `hover-accent-*`, `selected-*`, `active-*`.
+4. 알림 상태색은 `alert-*`, 검증 오류는 `error-*`, 채움용 위험색은 `danger-color`(#dc2626).
+5. 두 프로젝트 전용 값(`workspace-*`, `item-*`, `table-header-bg`, `badge-*`, `unsupported-*`, `partial-*`, `rail-bg`, `series-0~5` …)은 지역 변수로 둔다.
+
+### 프로젝트별 변경표 (현재 값 → 기준 적용 후)
+
+| 프로젝트 | light | dark |
+| --- | --- | --- |
+| ui-components | 변화 없음 | 버튼 hover `#727272`→`#3a4558` 뿐 |
+| ui-report-studio | 변화 없음 | 변화 없음 |
+| ui-grid | 글자 `#686868`→`#222222`, hover 글자 `#3a3d41`→`#000`, 테두리 `#cdcdcd`→`#d9dde3`, 셀 hover `#f3f3f3`→`#eef3fc`, 비활성 글자 `#ebebeb`→`#9aa1ab`, 오류 `#d9534f`→`#b42318` | 바탕 `#1a1a1a`→`#1f2836`, 테두리 `#585858`→`#3a4456`, 글자 `#e0e0e0`→`#ddd`, hover `#2b2b2b`→`#2f3b4f`, 버튼 `#5a5a5a`→`#2a3444`(hover `#727272`→`#3a4558`), 탭 `#2c2c2c`→`#18202c`, 스크롤 `#1e1e1e`→`#18202c`, `body-bg-thin` `#444343`→`#273244`, 오류 `#ff6b6b`→`#ff8a80`. **grid 전용 키(`header-bg #1a1717`, `summary-bg`, `cell-bg-linenumber`, `row-bg`, `fixed-column-bg`)는 무채색 그대로라 남색 바탕과 어긋남 → 지역에서 재조정 필요** |
+| ui-form | 글자, 테두리, 비활성 글자 (grid 와 동일). `color-danger #d9534f` 는 용도에 따라 `error-color`(#b42318) 또는 `danger-color`(#dc2626) 로 분리 필요 | grid 와 동일한 공통 값 변화 |
+| ui-role-builder | 글자, 테두리, 비활성 글자 | grid 와 동일한 공통 값 변화 |
+| ui-tree | 글자 `#686868`→`#222`, 테두리 `#dfe1e5`→`#d9dde3`(거의 같음), 선택 `#c8efff`→`#e9faff` | 바탕 `#1d212a`→`#1f2836`(거의 같음), 테두리 `#41444c`→`#3a4456`(거의 같음), 글자 `#b0b2b5`→`#ddd`, hover·선택: 밝은 하늘색+검정 글자 → 어두운 파랑+흰 글자, active 글자 `#3a3d41`→`#fff`, 버튼 hover `#3950a2`→`#3a4558` |
+| ui-multiSelect | tree 와 동일 + 선택 배경 rgba(청록)→`#e9faff`, 버튼 hover `#dee2e6`→`#e3e3e3` | tree 와 동일 + 선택 `#5774dd`→`#264f78`, 비활성 배경 `#878787`→`#555` |
+| ui-datetimepicker | 글자 `#34495e`→`#222`, 테두리 `#d3d2d2`→`#d9dde3`, hover `#d4d4d48a`→`#eef3fc`, 비활성 배경 `#f1f1f18a`→`#ebebeb` | 바탕 `#070d19`→`#1f2836`, 테두리 `#6e7380`→`#3a4456`, 글자 `#d0d6e1`→`#ddd`, hover `#31316c`→`#2f3b4f`, 비활성 `#818181`→`#555` |
+| ui-dialog / ui-toast | 테마 없음 → 지원 가능(알림 색은 동일 값) | 테마 없음 → 지원 가능 |
+| ui-loading | 해당 없음 | 해당 없음 |
+
+### 남은 결정 사항
+1. 글자색 `#222` 적용 여부 : ui-grid·ui-form·ui-tree·ui-multiSelect·ui-role-builder 의 light 본문이 전반적으로 더 진해진다.
+2. ui-grid 전용 dark 키(위 표) 재조정.
+3. ui-datetimepicker 선택한 날짜 색(light 녹색 `#0abf30`, dark 흰색)은 `selected-*` 와 의미가 달라 미해결.
+4. ui-tree 의 포커스(`#e4f7ff`) / open-active(`#b7e9ff`) 색 매핑.
+5. "파생" 표시된 dark 값 검토.

@@ -1,6 +1,7 @@
 @use 'sass:list';
 @use 'sass:map';
 @use 'sass:meta';
+@use 'sass:selector';
 @use 'light';
 @use 'dark';
 @use '../abstracts/functions' as fn;
@@ -21,6 +22,19 @@ $default-theme: light !default;
   @return map.get($themes, $name);
 }
 
+// 컴포넌트 CSS 용 토큰 참조. light 값을 fallback 으로 함께 출력한다.
+//   themed(border-color)  ->  var(--dui-border-color, #d9dde3)
+// 앱이 theme-vars.css 를 로드하지 않은 상태(단독 사용, CDN, UMD)에서도 light 로 정상 표시되고,
+// 로드한 경우에는 dark / 사용자 정의 테마가 적용된다. (dark 는 theme-vars.css 가 필요하다.)
+// 컴포넌트 CSS 안에서 --dui-* 를 다시 선언하지 말 것: 요소에 직접 선언한 값이 앱이 :root 에 지정한 값을 덮어쓴다.
+@function themed($name, $prefix: variables.$prefix, $themes: $themes) {
+  $light: get-theme($default-theme, $themes);
+  @if not map.has-key($light, $name) {
+    @error "Unknown theme token '#{$name}'. Available: #{map.keys($light)}";
+  }
+  @return var(#{fn.css-var-name($name, $prefix)}, #{map.get($light, $name)});
+}
+
 // map 의 모든 키를 CSS Custom Property 로 출력한다. (ui-grid themes/_mixin.scss 의 `theme` 믹스인과 같은 동작)
 //   @include theme-vars(themes.get-theme(dark));          -> --dui-font-color: ...
 //   @include theme-vars(themes.get-theme(dark), $prefix: '');   -> --font-color: ... (접두사 없는 기존 변수 호환)
@@ -33,6 +47,15 @@ $default-theme: light !default;
 // 이름으로 테마 변수를 출력한다.
 @mixin theme($name, $prefix: variables.$prefix, $themes: $themes) {
   @include theme-vars(get-theme($name, $themes), $prefix);
+}
+
+// '.a, .b .c' -> ('.a', '.b .c')
+@function scope-list($scope) {
+  $result: ();
+  @each $complex in selector.parse($scope) {
+    $result: list.append($result, '#{$complex}', comma);
+  }
+  @return $result;
 }
 
 // 한 테마를 선택자와 함께 출력한다.
@@ -48,12 +71,15 @@ $default-theme: light !default;
     }
     $selectors: list.append($selectors, $attr, comma);
   } @else {
-    @if $default {
-      $selectors: list.append($selectors, $scope, comma);
+    // $scope 가 '.a, .b' 처럼 쉼표로 이어져 있어도 각각 따로 처리한다. (전체 문자열에 접두/접미를 붙이면 앞/뒤 항목에만 적용된다.)
+    @each $item in scope-list($scope) {
+      @if $default {
+        $selectors: list.append($selectors, $item, comma);
+      }
+      // 조상에 지정 / 요소 자체에 지정 둘 다 허용한다.
+      $selectors: list.append($selectors, '#{$attr} #{$item}', comma);
+      $selectors: list.append($selectors, '#{$item}#{$attr}', comma);
     }
-    // 조상에 지정 / 요소 자체에 지정 둘 다 허용한다.
-    $selectors: list.append($selectors, '#{$attr} #{$scope}', comma);
-    $selectors: list.append($selectors, '#{$scope}#{$attr}', comma);
   }
 
   #{list.join((), $selectors, comma)} {
@@ -68,21 +94,27 @@ $default-theme: light !default;
   // 기본 테마를 먼저 출력해야 이후 테마가 같은 우선순위에서 덮어쓴다.
   @include define-theme($default, $default: true, $scope: $scope, $prefix: $prefix, $themes: $themes);
 
-  @each $name in map.keys($themes) {
-    @if $name != $default {
-      @include define-theme($name, $scope: $scope, $prefix: $prefix, $themes: $themes);
+  // OS 설정은 명시적 data-daracl-theme 선택자보다 앞에 출력해야 명시 값이 이긴다.
+  // 범위(scope) 지정 시에는 :root 에 속성이 없을 때만 적용한다. (조상에 속성이 있는 경우를 :not 으로 판별할 수 없으므로 :root 기준)
+  @if $auto-dark and map.has-key($themes, dark) {
+    @media (prefers-color-scheme: dark) {
+      $selectors: ();
+      @if $scope == null {
+        $selectors: ':root:not([#{variables.$theme-attribute}])';
+      } @else {
+        @each $item in scope-list($scope) {
+          $selectors: list.append($selectors, ':where(:root:not([#{variables.$theme-attribute}])) #{$item}', comma);
+        }
+      }
+      #{$selectors} {
+        @include theme-vars(get-theme(dark, $themes), $prefix);
+      }
     }
   }
 
-  @if $auto-dark and map.has-key($themes, dark) {
-    @media (prefers-color-scheme: dark) {
-      $root: ':root';
-      @if $scope != null {
-        $root: $scope;
-      }
-      #{$root}:not([#{variables.$theme-attribute}]) {
-        @include theme-vars(get-theme(dark, $themes), $prefix);
-      }
+  @each $name in map.keys($themes) {
+    @if $name != $default {
+      @include define-theme($name, $scope: $scope, $prefix: $prefix, $themes: $themes);
     }
   }
 }

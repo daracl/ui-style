@@ -1,6 +1,7 @@
 @use 'sass:list';
 @use '../tokens';
 @use 'functions' as fn;
+@use '../themes/mixins' as themes;
 @use 'variables';
 
 // ---------------------------------------------------------------------------
@@ -97,10 +98,10 @@
 @mixin form-control($prefix: variables.$prefix) {
   height: tokens.$control-height;
   padding: tokens.$control-padding;
-  border: tokens.$border-width solid fn.token(input-border-color, $prefix: $prefix);
+  border: tokens.$border-width solid themes.themed(input-border-color, $prefix: $prefix);
   border-radius: tokens.$control-radius;
-  background-color: fn.token(input-bg, $prefix: $prefix);
-  color: fn.token(input-color, $prefix: $prefix);
+  background-color: themes.themed(input-bg, $prefix: $prefix);
+  color: themes.themed(input-color, $prefix: $prefix);
   font-family: inherit;
   font-size: tokens.$control-font-size;
   line-height: tokens.$line-height-tight;
@@ -109,11 +110,11 @@
 
   &:hover,
   &:focus {
-    border-color: fn.token(input-border-hover-color, $prefix: $prefix);
+    border-color: themes.themed(input-border-hover-color, $prefix: $prefix);
   }
 
   &:disabled {
-    background-color: fn.token(input-disabled-bg, $prefix: $prefix);
+    background-color: themes.themed(input-disabled-bg, $prefix: $prefix);
     cursor: default;
   }
 }
@@ -121,15 +122,15 @@
 @mixin form-button($prefix: variables.$prefix) {
   @include form-control($prefix);
   padding: tokens.$control-padding-button;
-  background-color: fn.token(button-bg, $prefix: $prefix);
+  background-color: themes.themed(button-bg, $prefix: $prefix);
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    background-color: fn.token(button-hover-bg, $prefix: $prefix);
+    background-color: themes.themed(button-hover-bg, $prefix: $prefix);
   }
 
   &:disabled {
-    background-color: fn.token(button-bg, $prefix: $prefix);
+    background-color: themes.themed(button-bg, $prefix: $prefix);
     opacity: 0.45;
   }
 }

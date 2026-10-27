@@ -61,11 +61,31 @@
   },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "abstracts",
+    "tokens",
+    "themes",
+    "base",
+    "utilities",
+    "index.scss",
+    "docs/guide.html",
+    "CHANGELOG.md"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "sass": ">=1.80.0"
+  },
+  "peerDependenciesMeta": {
+    "sass": {
+      "optional": true
+    }
+  },
   "scripts": {
     "clean": "node scripts/clean.mjs",
-    "build": "yarn clean && yarn build:css && yarn build:css:min",
+    "build": "yarn clean && yarn build:css && yarn build:css:min && yarn build:guide",
+    "build:guide": "node scripts/build-guide.mjs",
     "build:css": "sass --no-source-map --load-path=src src/css/style.scss:dist/style.css src/css/theme-vars.scss:dist/theme-vars.css",
     "build:css:min": "sass --no-source-map --style=compressed --load-path=src src/css/style.scss:dist/style.min.css src/css/theme-vars.scss:dist/theme-vars.min.css",
     "test": "yarn build && node scripts/verify.mjs",

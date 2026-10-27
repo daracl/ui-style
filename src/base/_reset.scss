@@ -1,4 +1,4 @@
-@use '../abstracts/functions' as fn;
+@use '../themes/mixins' as themes;
 @use '../abstracts/variables';
 @use '../tokens';
 
@@ -23,5 +23,5 @@
   font-family: tokens.$font-family;
   font-size: $size;
   line-height: tokens.$line-height-base;
-  color: fn.token(font-color, $prefix: $prefix);
+  color: themes.themed(font-color, $prefix: $prefix);
 }

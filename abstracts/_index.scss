@@ -1,0 +1,3 @@
+// load-path 방식(sass CLI --load-path=node_modules 등)에서도 @use "@daracl/ui-style/abstracts" 가 풀리도록 하는 진입 파일.
+// 실제 구현은 src/abstracts 에 있다.
+@forward "../src/abstracts";
