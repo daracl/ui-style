@@ -194,6 +194,18 @@ try {
   rmSync(sandbox, { recursive: true, force: true });
 }
 
+// ---- 3-1. 가이드 ----
+console.log('guide');
+{
+  const guidePath = join(root, 'docs/guide.html');
+  check('docs/guide.html 이 생성된다', existsSync(guidePath));
+  const guide = existsSync(guidePath) ? readFileSync(guidePath, 'utf8') : '';
+  const body = guide.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
+  check('가이드에 theme-vars.css 의 변수가 포함된다', guide.includes('--dui-border-color') && guide.includes('--dui-hover-accent-bg'));
+  check('가이드에 API 레퍼런스가 포함된다', guide.includes('themed($name') && guide.includes('keyframes-fade'));
+  check('가이드 본문에 깨진 템플릿 값이 없다', !/undefined|\[object|NaN/.test(body));
+}
+
 // ---- 4. 경고 ----
 console.log('sass warnings');
 check('경고 없음', warnings.length === 0, warnings.join('\n'));

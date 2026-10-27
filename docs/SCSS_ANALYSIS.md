@@ -140,36 +140,59 @@
 8. **Sass 해석 방식**: Vite / webpack 은 `@use '@daracl/ui-style/abstracts'` 로, Sass CLI·JS API 의 `NodePackageImporter` 는 `@use 'pkg:@daracl/ui-style/abstracts'` 로 해석한다.
 9. `ui-grid.worktrees` 는 분석에서 제외했다. 원본 `ui-grid` 와 동기화된 상태인지는 확인하지 않았다.
 
-## 8. 토큰 기준: ui-components / ui-report-studio
+## 8. 마이그레이션 결과 (최종 점검)
 
-모든 프로젝트가 ui-style 의 변수를 쓰고, 프로젝트 전용 값만 지역 변수로 둔다는 전제다.
-**ui-components / ui-report-studio 의 테마 값을 기준값으로 삼았다.** (두 프로젝트의 입력 요소 값은 원래 ui-grid 값과 같다.)
+1~7절은 분석 시점의 기록이다. 이후 실제 적용하면서 결정된 사항과 최종 상태는 이 절에 정리한다.
+사용 방법과 토큰 / API 목록은 [guide.html](guide.html) 을 참고한다.
 
-### 기준 적용 규칙
-1. 두 프로젝트가 정의한 토큰은 그 값을 그대로 쓴다. 둘이 다르면(dark `button-hover-bg`) report-studio 값을 채택했다.
-2. 두 프로젝트에 없는 토큰은 ui-grid / ui-tree / ui-multiSelect / ui-datetimepicker 값을 쓰고(출처를 주석에 표기), dark 는 남색 바탕에 맞춰 새로 정했다("파생" 표기).
-3. 배경 / 글자는 항상 쌍으로 사용한다: `hover-*`, `hover-accent-*`, `selected-*`, `active-*`.
-4. 알림 상태색은 `alert-*`, 검증 오류는 `error-*`, 채움용 위험색은 `danger-color`(#dc2626).
-5. 두 프로젝트 전용 값(`workspace-*`, `item-*`, `table-header-bg`, `badge-*`, `unsupported-*`, `partial-*`, `rail-bg`, `series-0~5` …)은 지역 변수로 둔다.
+### 8.1 확정된 설계
 
-### 프로젝트별 변경표 (현재 값 → 기준 적용 후)
+| 항목 | 결정 |
+| --- | --- |
+| 기준 테마 | ui-components / ui-report-studio 의 테마 값. 두 프로젝트에 없는 항목은 ui-grid / ui-tree 등에서 가져오고 dark 는 남색 바탕에 맞춰 "파생" 값으로 채움 (`src/themes/_light.scss`, `_dark.scss` 주석에 출처 표기) |
+| 테마 전환 | `data-daracl-theme` 속성 + OS 설정(`prefers-color-scheme`) 두 가지만. `body.dark` / `.dark` 클래스 방식은 지원하지 않음 |
+| 변수 접두사 | 공통 `--dui-*`. 프로젝트 전용 값만 자기 접두사(`--dg-*`, `--drs-*`, `--dstud-*`, `--dga-*`, `--dkp-*`, `--ddtp-*`, `--df-*`, `--dqu-*`) |
+| 컴포넌트 CSS | `themes.themed(key)` 로 참조 → `var(--dui-key, light값)`. 단독으로도 light 로 표시, dark 는 `theme-vars.css` 필요 |
+| 배경 / 글자 | hover / hover-accent / selected / active 는 `*-bg` + `*-color` 쌍으로 정의 |
+| 알림 상태색 | `alert-*-color` 로 분리 (검증 오류 `error-*` 와 구분) |
+| 영역별 테마 | 요소에 직접 지정 (`themes.theme($name)`). ui-grid `dg-dark`, ui-components `data-theme` 동작 유지 |
+| 이전 변수 이름 | alias 를 제공하지 않음 (가이드의 "변수 이름 매핑" 참고) |
 
-| 프로젝트 | light | dark |
-| --- | --- | --- |
-| ui-components | 변화 없음 | 버튼 hover `#727272`→`#3a4558` 뿐 |
-| ui-report-studio | 변화 없음 | 변화 없음 |
-| ui-grid | 글자 `#686868`→`#222222`, hover 글자 `#3a3d41`→`#000`, 테두리 `#cdcdcd`→`#d9dde3`, 셀 hover `#f3f3f3`→`#eef3fc`, 비활성 글자 `#ebebeb`→`#9aa1ab`, 오류 `#d9534f`→`#b42318` | 바탕 `#1a1a1a`→`#1f2836`, 테두리 `#585858`→`#3a4456`, 글자 `#e0e0e0`→`#ddd`, hover `#2b2b2b`→`#2f3b4f`, 버튼 `#5a5a5a`→`#2a3444`(hover `#727272`→`#3a4558`), 탭 `#2c2c2c`→`#18202c`, 스크롤 `#1e1e1e`→`#18202c`, `body-bg-thin` `#444343`→`#273244`, 오류 `#ff6b6b`→`#ff8a80`. **grid 전용 키(`header-bg #1a1717`, `summary-bg`, `cell-bg-linenumber`, `row-bg`, `fixed-column-bg`)는 무채색 그대로라 남색 바탕과 어긋남 → 지역에서 재조정 필요** |
-| ui-form | 글자, 테두리, 비활성 글자 (grid 와 동일). `color-danger #d9534f` 는 용도에 따라 `error-color`(#b42318) 또는 `danger-color`(#dc2626) 로 분리 필요 | grid 와 동일한 공통 값 변화 |
-| ui-role-builder | 글자, 테두리, 비활성 글자 | grid 와 동일한 공통 값 변화 |
-| ui-tree | 글자 `#686868`→`#222`, 테두리 `#dfe1e5`→`#d9dde3`(거의 같음), 선택 `#c8efff`→`#e9faff` | 바탕 `#1d212a`→`#1f2836`(거의 같음), 테두리 `#41444c`→`#3a4456`(거의 같음), 글자 `#b0b2b5`→`#ddd`, hover·선택: 밝은 하늘색+검정 글자 → 어두운 파랑+흰 글자, active 글자 `#3a3d41`→`#fff`, 버튼 hover `#3950a2`→`#3a4558` |
-| ui-multiSelect | tree 와 동일 + 선택 배경 rgba(청록)→`#e9faff`, 버튼 hover `#dee2e6`→`#e3e3e3` | tree 와 동일 + 선택 `#5774dd`→`#264f78`, 비활성 배경 `#878787`→`#555` |
-| ui-datetimepicker | 글자 `#34495e`→`#222`, 테두리 `#d3d2d2`→`#d9dde3`, hover `#d4d4d48a`→`#eef3fc`, 비활성 배경 `#f1f1f18a`→`#ebebeb` | 바탕 `#070d19`→`#1f2836`, 테두리 `#6e7380`→`#3a4456`, 글자 `#d0d6e1`→`#ddd`, hover `#31316c`→`#2f3b4f`, 비활성 `#818181`→`#555` |
-| ui-dialog / ui-toast | 테마 없음 → 지원 가능(알림 색은 동일 값) | 테마 없음 → 지원 가능 |
-| ui-loading | 해당 없음 | 해당 없음 |
+### 8.2 프로젝트별 결과
 
-### 남은 결정 사항
-1. 글자색 `#222` 적용 여부 : ui-grid·ui-form·ui-tree·ui-multiSelect·ui-role-builder 의 light 본문이 전반적으로 더 진해진다.
-2. ui-grid 전용 dark 키(위 표) 재조정.
-3. ui-datetimepicker 선택한 날짜 색(light 녹색 `#0abf30`, dark 흰색)은 `selected-*` 와 의미가 달라 미해결.
-4. ui-tree 의 포커스(`#e4f7ff`) / open-active(`#b7e9ff`) 색 매핑.
-5. "파생" 표시된 dark 값 검토.
+| 프로젝트 | 적용 | 검증 | 비고 |
+| --- | --- | --- | --- |
+| ui-grid | 공통 `--dui-*` + 전용 `--dg-*`, `dg-dark` 클래스 유지, 막대 색 읽는 JS 변수 이름 변경 | Vite ESM / UMD, tsc, Jest 116 | 영향 범위 가장 큼 (글자 `#222`, dark 남색). 헤더 라벨은 `label-color` |
+| ui-form | 컨트롤 / 테두리 / 탭 색, 전용 `--df-*` | Vite ESM / UMD, tsc | `body.dark` 제거 |
+| ui-components | 영역별 전용 값만 `--dstud-* / --dga-* / --dkp-*` | sass CLI, Vite ESM / UMD, tsc, Jest 542 | `build:css` 에 `--load-path=node_modules` |
+| ui-report-studio | 전용 `--drs-*` | sass CLI, Vite ESM / viewer / UMD, tsc, Jest 333 | 다른 패키지 dist css 를 포함하므로 재빌드 필요 |
+| ui-role-builder | 컨트롤 / 그룹 / 컨테이너 색 | Vite ESM / UMD, tsc | 첫 적용 프로젝트 |
+| ui-tree | 글자 / 배경 / hover 쌍 / 선택 쌍 | Vite ESM | 선택 배경이 hover 보다 연해짐 |
+| ui-multiSelect | 글자 / 배경 / 테두리 / 버튼 / 페이지네이션 | webpack prod | 페이지네이션 hover 글자 대비 개선 |
+| ui-datetimepicker | 전용 `--ddtp-select-bg`, keyframes `ddtp-fade-*` | SCSS 컴파일 | 선택일 색은 선택색과 의미가 달라 지역 변수 |
+| ui-dialog | 글자 / 배경 / 헤더 / 테두리, keyframes `ddlg-fade-*` | esbuild-sass-plugin, webpack prod | 색 버튼 variant 는 고정 색 유지 |
+| ui-toast | z-index 토큰만 | SCSS 컴파일, Vite ESM | 원격의 Vite 전환과 충돌 → 원격 쪽 채택 후 z-index / 의존성만 유지 |
+| ui-loading | 해당 없음 | - | SCSS 없음 |
+
+### 8.3 최종 점검에서 확인한 것
+
+- 10개 프로젝트의 SCSS 진입 파일이 모두 경고 없이 컴파일된다. 컴파일된 CSS 에 접두사 없는 옛 변수와 클래스 기반 dark 선택자가 남아 있지 않다.
+- 예외: ui-report-studio 는 `@use` 로 포함하는 다른 패키지의 `dist/*.css`(ui-grid, ui-components)에 마이그레이션 이전 빌드의 변수가 남아 있다. 두 프로젝트를 다시 빌드하면 해소된다.
+- ui-toast 에 병합 충돌 표시가 커밋되어 있어(`package.json`, `style/daracl.toast.scss`) 해결했다. 원격이 이미 keyframes 접두사(`daraclFadeIn`)와 `.dt-hide` 로 정리해 두어서 그쪽을 채택했다.
+- esbuild-sass-plugin 이 `@daracl/ui-style` 을 해석함을 확인했다 (ui-dialog).
+- `ui-style` 루트에 `abstracts/`, `tokens/`, `themes/`, `base/`, `utilities/`, `index.scss` 진입 파일을 추가해 sass CLI(`--load-path=node_modules`)에서도 해석된다.
+
+### 8.4 남은 일 / 주의
+
+1. **배포 순서**: `@daracl/ui-style` 을 먼저 npm 에 배포한 뒤 각 프로젝트의 `^0.0.1` 의존성이 해석되도록 한다. 개발 중에는 `node_modules/@daracl/ui-style` 을 이 폴더로 연결한 상태다 (junction). 배포 전에 정식 설치로 바꾼다.
+2. **`file:` 의존**: ui-components(`@daracl/grid`), ui-report-studio(`@daracl/drift`, `@daracl/grid`, `@daracl/ui-components`)에 남아 있다. 배포 전에 버전 범위로 정리한다.
+3. **참조되지 않는 옛 파일**이 일부 프로젝트에 남아 있다. 직접 삭제한다.
+   - ui-role-builder `style/themes/`
+   - ui-form `style/themes/`
+   - ui-grid `style/themes/_common.scss`, `_mixin.scss`
+   - ui-components `style/shared/themes/_common.scss`, `_mixin.scss`, `style/shared/abstracts/_mixins.scss`
+   - ui-report-studio `style/themes/_mixin.scss`, `style/abstracts/_mixins.scss`
+   - ui-tree / ui-multiSelect `style/_variable.scss`, `style/theme/_variable-dark.scss`
+4. **시각 확인**: 빌드와 테스트는 통과했지만 화면은 확인하지 않았다. 글자색 `#222` 적용(ui-grid, ui-form, ui-tree, ui-multiSelect, ui-datetimepicker, ui-role-builder)과 dark 남색 전환, "파생" dark 값을 눈으로 확인한다.
+5. **ui-toast 원격 불일치(이번 작업 범위 밖)**: `Toast.ts` 는 `hide` 클래스와 인라인 `animation: progressAnimation` 을 쓰는데 원격 SCSS 는 `.dt-hide`, `daraclProgressAnimation` 이다. 닫힘 / 진행 막대 애니메이션이 동작하는지 확인이 필요하다.
+6. **외부 앱**: 기존 접두사 없는 변수(`--border-color` 등)나 `body.dark` 를 쓰던 앱은 `--dui-*` 와 `data-daracl-theme` 로 바꿔야 한다.
