@@ -1,0 +1,16 @@
+@use '../tokens';
+
+// 라이트 / 다크에서 값이 같은 의미 토큰.
+// 테마별로 값이 달라져야 하면 _light.scss / _dark.scss 에서 override 한다.
+$theme-common: (
+  primary-color: tokens.$accent,
+  primary-soft-bg: tokens.$accent-soft,
+  success-color: tokens.$success,
+  warning-color: tokens.$warning,
+  info-color: tokens.$info,
+  bar-positive-bg: #77c0fc,
+  bar-negative-bg: #ff8989,
+  tooltip-color: tokens.$white,
+  icon-stroke-on-color: tokens.$icon-stroke-on-color,
+  icon-fill-stroke-on-color: tokens.$icon-fill-stroke-on-color,
+);

@@ -1,0 +1,9 @@
+// 모션 토큰. 기존 transition / animation 값(0.1s ~ 0.3s)을 단계화했다.
+
+$duration-fast: 0.1s !default; // ui-grid choice, report-studio preview (0.12s)
+$duration-base: 0.2s !default; // ui-grid dropdown, ui-datetimepicker fade
+$duration-slow: 0.3s !default; // ui-grid switch, ui-dialog / ui-toast fade
+
+$ease-standard: ease !default;
+$ease-out: cubic-bezier(0.22, 0.8, 0.26, 1) !default; // report-studio properties panel
+$ease-move: cubic-bezier(0.2, 0.8, 0.2, 1) !default; // ui-drift 이동 애니메이션

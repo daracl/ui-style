@@ -1,0 +1,11 @@
+// ui-style 설정 값. 토큰이 아니라 "동작" 설정이다.
+// 필요하면 최초 @use 시점에 with 로 변경한다.
+//   @use '@daracl/ui-style/abstracts' with ($prefix: 'drs');
+
+// CSS Custom Property / 클래스 접두사. `--dui-border-color`, `.dui-hide` 처럼 사용된다.
+// 기존 프로젝트의 접두사 없는 변수(--border-color)와 충돌하지 않도록 기본값을 둔다.
+$prefix: 'dui' !default;
+
+// 테마 전환 선택자.
+// [data-daracl-theme='dark'] 는 ui-grid 가 이미 사용 중인 속성이다 (daracl.grid.scss).
+$theme-attribute: 'data-daracl-theme' !default;

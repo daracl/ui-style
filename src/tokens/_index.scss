@@ -1,0 +1,9 @@
+// 디자인 토큰 (순수 SCSS 값). CSS 를 출력하지 않는다.
+@forward 'colors';
+@forward 'spacing';
+@forward 'typography';
+@forward 'borders';
+@forward 'shadows';
+@forward 'sizes';
+@forward 'z-index';
+@forward 'motion';

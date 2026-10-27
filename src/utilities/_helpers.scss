@@ -1,0 +1,93 @@
+@use '../abstracts/mixins' as m;
+@use '../abstracts/variables';
+@use '../abstracts/functions' as fn;
+@use '../tokens';
+@use 'scrollbar';
+
+// 유틸리티 클래스. ui-grid / ui-role-builder 의 base/_utilities.scss(.dg-hide, .dg-ellipsis ...) 와
+// ui-grid base.scss(.dg-primary ...) 를 접두사 기반으로 일반화했다.
+// 클래스가 필요한 프로젝트에서만 `@include helpers;` 를 호출한다. (접두사가 다르면 중복 출력되지 않는다.)
+@mixin helpers($prefix: variables.$prefix) {
+  .#{$prefix}-text-left {
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .#{$prefix}-text-center {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}-text-right {
+    text-align: right;
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}-hide {
+    display: none !important;
+  }
+
+  .#{$prefix}-show {
+    display: block !important;
+  }
+
+  .#{$prefix}-invisible {
+    visibility: hidden !important;
+  }
+
+  .#{$prefix}-disabled {
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+  }
+
+  .#{$prefix}-ellipsis,
+  .#{$prefix}-ellipsis > * {
+    @include m.ellipsis;
+    padding: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}-noselect {
+    @include m.user-select(none);
+  }
+
+  .#{$prefix}-select {
+    @include m.user-select(text);
+  }
+
+  .#{$prefix}-scrollbar {
+    @include scrollbar.scrollbar($prefix: $prefix);
+  }
+
+  .#{$prefix}-scrollbar-hidden {
+    @include scrollbar.scrollbar-hidden;
+  }
+}
+
+// ui-grid .dg-primary / .dg-secondary / .dg-info / .dg-success / .dg-warning / .dg-danger
+@mixin variants($prefix: variables.$prefix) {
+  .#{$prefix}-primary {
+    @include m.solid-variant(tokens.$primary, $prefix: $prefix);
+  }
+
+  .#{$prefix}-secondary {
+    @include m.solid-variant(tokens.$btn-secondary, $prefix: $prefix);
+  }
+
+  .#{$prefix}-success {
+    @include m.solid-variant(tokens.$btn-success, $prefix: $prefix);
+  }
+
+  .#{$prefix}-danger {
+    @include m.solid-variant(tokens.$btn-danger, $prefix: $prefix);
+  }
+
+  // 밝은 배경이라 글자 / 아이콘을 어둡게 한다.
+  .#{$prefix}-info {
+    @include m.solid-variant(tokens.$btn-info, tokens.$gray-900, tokens.$icon-fill-stroke-on-color, tokens.$white, $prefix);
+  }
+
+  .#{$prefix}-warning {
+    @include m.solid-variant(tokens.$btn-warning, tokens.$gray-900, tokens.$icon-fill-stroke-on-color, tokens.$white, $prefix);
+  }
+}

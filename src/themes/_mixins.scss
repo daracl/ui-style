@@ -1,0 +1,88 @@
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+@use 'light';
+@use 'dark';
+@use '../abstracts/functions' as fn;
+@use '../abstracts/variables';
+
+// 테마 추가 시 여기에 등록한다. 기존 프로젝트의 $themes 와 같은 형태 (이름 -> 토큰 map).
+$themes: (
+  light: light.$theme,
+  dark: dark.$theme,
+) !default;
+
+$default-theme: light !default;
+
+@function get-theme($name, $themes: $themes) {
+  @if not map.has-key($themes, $name) {
+    @error "Unknown theme '#{$name}'. Available: #{map.keys($themes)}";
+  }
+  @return map.get($themes, $name);
+}
+
+// map 의 모든 키를 CSS Custom Property 로 출력한다. (ui-grid themes/_mixin.scss 의 `theme` 믹스인과 같은 동작)
+//   @include theme-vars(themes.get-theme(dark));          -> --dui-font-color: ...
+//   @include theme-vars(themes.get-theme(dark), $prefix: '');   -> --font-color: ... (접두사 없는 기존 변수 호환)
+@mixin theme-vars($map, $prefix: variables.$prefix) {
+  @each $key, $value in $map {
+    #{fn.css-var-name($key, $prefix)}: #{$value};
+  }
+}
+
+// 이름으로 테마 변수를 출력한다.
+@mixin theme($name, $prefix: variables.$prefix, $themes: $themes) {
+  @include theme-vars(get-theme($name, $themes), $prefix);
+}
+
+// 한 테마를 선택자와 함께 출력한다.
+//   $scope 가 없으면 전역(:root) 기준, 있으면 해당 컴포넌트 루트에만 적용한다.
+//   선택자 : [data-daracl-theme=dark]   (+ 기본 테마는 :root 또는 $scope 자체)
+@mixin define-theme($name, $default: false, $scope: null, $prefix: variables.$prefix, $themes: $themes) {
+  $attr: '[#{variables.$theme-attribute}="#{$name}"]';
+  $selectors: ();
+
+  @if $scope == null {
+    @if $default {
+      $selectors: list.append($selectors, ':root', comma);
+    }
+    $selectors: list.append($selectors, $attr, comma);
+  } @else {
+    @if $default {
+      $selectors: list.append($selectors, $scope, comma);
+    }
+    // 조상에 지정 / 요소 자체에 지정 둘 다 허용한다.
+    $selectors: list.append($selectors, '#{$attr} #{$scope}', comma);
+    $selectors: list.append($selectors, '#{$scope}#{$attr}', comma);
+  }
+
+  #{list.join((), $selectors, comma)} {
+    @include theme-vars(get-theme($name, $themes), $prefix);
+  }
+}
+
+// 등록된 모든 테마를 출력한다.
+//   $auto-dark: true 이면 OS 설정(prefers-color-scheme: dark)을 따르되,
+//               data-daracl-theme 가 명시된 경우에는 그 값이 우선한다.
+@mixin define-themes($scope: null, $default: $default-theme, $auto-dark: false, $prefix: variables.$prefix, $themes: $themes) {
+  // 기본 테마를 먼저 출력해야 이후 테마가 같은 우선순위에서 덮어쓴다.
+  @include define-theme($default, $default: true, $scope: $scope, $prefix: $prefix, $themes: $themes);
+
+  @each $name in map.keys($themes) {
+    @if $name != $default {
+      @include define-theme($name, $scope: $scope, $prefix: $prefix, $themes: $themes);
+    }
+  }
+
+  @if $auto-dark and map.has-key($themes, dark) {
+    @media (prefers-color-scheme: dark) {
+      $root: ':root';
+      @if $scope != null {
+        $root: $scope;
+      }
+      #{$root}:not([#{variables.$theme-attribute}]) {
+        @include theme-vars(get-theme(dark, $themes), $prefix);
+      }
+    }
+  }
+}

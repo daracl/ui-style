@@ -1,0 +1,73 @@
+@use '../abstracts/variables';
+@use '../abstracts/functions' as fn;
+@use '../tokens';
+
+// 기존 프로젝트에는 전역 이름(fadeIn / fadeOut)의 @keyframes 가 ui-dialog, ui-toast, ui-datetimepicker 에 중복 정의되어 있고,
+// 같은 페이지에 로드되면 서로 덮어쓴다. 여기서는 접두사를 붙여 충돌을 방지한다. (dui-fade-in ...)
+
+// keyframes 이름 : keyframe-name(fade-in) -> dui-fade-in
+@function keyframe-name($name, $prefix: variables.$prefix) {
+  @return '#{$prefix}-#{$name}';
+}
+
+// @keyframes 를 출력한다. 필요한 프로젝트에서 한 번만 include 한다.
+@mixin keyframes($prefix: variables.$prefix) {
+  @keyframes #{keyframe-name(fade-in, $prefix)} {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes #{keyframe-name(fade-out, $prefix)} {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes #{keyframe-name(spin, $prefix)} {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  // ui-dialog / ui-toast 의 daradialogHide / daraToastHide : 살짝 밀렸다가 오른쪽으로 사라진다.
+  @keyframes #{keyframe-name(slide-out-right, $prefix)} {
+    0% {
+      transform: translateX(-10px);
+    }
+    40% {
+      transform: translateX(0%);
+    }
+    80% {
+      transform: translateX(-5%);
+    }
+    100% {
+      transform: translateX(calc(100% + 20px));
+    }
+  }
+}
+
+// animation 속성 헬퍼 : @include animate(fade-in, $duration: 0.3s)
+@mixin animate($name, $duration: tokens.$duration-slow, $easing: tokens.$ease-standard, $fill: forwards, $prefix: variables.$prefix) {
+  animation: #{keyframe-name($name, $prefix)} $duration $easing $fill;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 0.01ms;
+  }
+}
+
+// ui-tree 의 dt-spinner-loader. 두께 있는 원형 스피너. 먼저 `keyframes` 를 출력해 두어야 한다.
+@mixin spinner($size: 21px, $color: #d1d1dc, $thickness: 3.8px, $prefix: variables.$prefix) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, $color 94%, #0000) top / $thickness $thickness no-repeat, conic-gradient(#0000 30%, $color);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - #{$thickness}), #000 0);
+  animation: #{keyframe-name(spin, $prefix)} 1s infinite linear;
+}

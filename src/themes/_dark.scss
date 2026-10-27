@@ -1,0 +1,57 @@
+@use 'sass:map';
+@use '../tokens';
+@use 'common';
+
+// ui-grid dark theme 기준. ui-grid 에 없는 muted-color / body-bg-deep / button-active-bg 는
+// 다른 dark 값과의 대비를 맞춘 파생 값이므로 실제 화면에서 조정이 필요할 수 있다.
+$theme: map.merge(
+  common.$theme-common,
+  (
+    font-color: tokens.$dark-100,
+    font-hover-color: tokens.$white,
+    font-disable-color: tokens.$gray-200,
+    muted-color: #9aa1ab,
+    border-color: tokens.$dark-400,
+    border-thick-color: #807e7e,
+    body-bg: tokens.$dark-900,
+    body-bg-thin: tokens.$dark-500,
+    body-bg-deep: #111111,
+    body-bg-hover: #565555,
+    disabled-bg: #555555,
+    input-bg: tokens.$dark-800,
+    input-color: #f0f0f0,
+    input-border-color: tokens.$dark-400,
+    input-border-hover-color: #807e7e,
+    input-disabled-bg: #555555,
+    button-bg: #5a5a5a,
+    button-hover-bg: tokens.$dark-300,
+    button-bg-active: #616161,
+    tab-bg: tokens.$dark-700,
+    tab-bg-hover: #3c3c3c,
+    tooltip-bg: tokens.$dark-500,
+    error-color: tokens.$danger-dark,
+    required-color: tokens.$required-dark,
+    invalid-font-color: tokens.$required-dark,
+    invalid-border-color: tokens.$invalid-border-dark,
+    invalid-bg: tokens.$invalid-bg-dark,
+    hover-bg: #2b2b2b,
+    selected-bg: tokens.$selection-bg-dark,
+    selected-border-color: tokens.$selection-border-dark,
+    selected-color: tokens.$link-dark,
+    check-bg: tokens.$dark-200,
+    check-active-bg: #00c1ff,
+    check-mark-color: #4e4e4e,
+    check-indeterminate-bg: tokens.$icon-stroke-dark,
+    scroll-bg: tokens.$dark-850,
+    scroll-track-bg: tokens.$dark-850,
+    scroll-thumb-bg: #555555,
+    scroll-thumb-hover-bg: #777777,
+    scroll-button-bg: tokens.$dark-600,
+    icon-stroke-color: tokens.$icon-stroke-dark,
+    icon-fill-stroke-color: tokens.$dark-900,
+    empty-icon-color: #888888,
+    overlay-bg: rgba(0, 0, 0, 0.6),
+    shadow: 0 4px 10px rgba(0, 0, 0, 0.5),
+    page-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
+  )
+);

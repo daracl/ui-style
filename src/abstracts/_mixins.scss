@@ -1,0 +1,147 @@
+@use 'sass:list';
+@use '../tokens';
+@use 'functions' as fn;
+@use 'variables';
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
+@mixin flex-center($inline: false) {
+  @if $inline {
+    display: inline-flex;
+  } @else {
+    display: flex;
+  }
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin absolute-fill {
+  position: absolute;
+  inset: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Text
+// ---------------------------------------------------------------------------
+// ui-grid .dg-ellipsis 의 구현. min-width: 0 이 있어야 flex 자식에서도 말줄임이 동작한다.
+@mixin ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+}
+
+// ui-grid .dg-noselect / .dg-select (ui-tree, ui-grid 에 vendor prefix 와 함께 중복)
+@mixin user-select($value: none) {
+  -webkit-user-select: $value;
+  user-select: $value;
+  @if $value == none {
+    -webkit-touch-callout: none;
+  } @else {
+    -webkit-touch-callout: text;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Interaction / media
+// ---------------------------------------------------------------------------
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin coarse-pointer {
+  @media (pointer: coarse) {
+    @content;
+  }
+}
+
+@mixin transition($properties: all, $duration: tokens.$duration-base, $easing: tokens.$ease-standard) {
+  $list: ();
+  @each $property in $properties {
+    $list: list.append($list, $property $duration $easing, comma);
+  }
+  transition: $list;
+
+  @include reduced-motion {
+    transition: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Form controls
+// ui-form(abstracts) / ui-components / ui-report-studio 에 접두사만 다른 동일 구현이 3벌 있었다.
+// 테마 변수(--<prefix>-input-bg 등)는 themes 모듈이 제공한다.
+// ---------------------------------------------------------------------------
+@mixin form-control($prefix: variables.$prefix) {
+  height: tokens.$control-height;
+  padding: tokens.$control-padding;
+  border: tokens.$border-width solid fn.token(input-border-color, $prefix: $prefix);
+  border-radius: tokens.$control-radius;
+  background-color: fn.token(input-bg, $prefix: $prefix);
+  color: fn.token(input-color, $prefix: $prefix);
+  font-family: inherit;
+  font-size: tokens.$control-font-size;
+  line-height: tokens.$line-height-tight;
+  box-sizing: border-box;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    border-color: fn.token(input-border-hover-color, $prefix: $prefix);
+  }
+
+  &:disabled {
+    background-color: fn.token(input-disabled-bg, $prefix: $prefix);
+    cursor: default;
+  }
+}
+
+@mixin form-button($prefix: variables.$prefix) {
+  @include form-control($prefix);
+  padding: tokens.$control-padding-button;
+  background-color: fn.token(button-bg, $prefix: $prefix);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: fn.token(button-hover-bg, $prefix: $prefix);
+  }
+
+  &:disabled {
+    background-color: fn.token(button-bg, $prefix: $prefix);
+    opacity: 0.45;
+  }
+}
+
+// 색이 채워진 버튼 변형 (ui-grid .dg-primary / .dg-success ...).
+// 자식 요소의 글자색과 아이콘 stroke 변수를 함께 바꾼다.
+@mixin solid-variant($background, $color: #fff, $icon-stroke: tokens.$icon-stroke-on-color, $icon-fill-stroke: tokens.$icon-fill-stroke-on-color, $prefix: variables.$prefix) {
+  background-color: $background;
+
+  * {
+    color: $color;
+    #{fn.css-var-name(icon-stroke-color, $prefix)}: $icon-stroke;
+    #{fn.css-var-name(icon-fill-stroke-color, $prefix)}: $icon-fill-stroke;
+  }
+}

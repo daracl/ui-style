@@ -1,0 +1,13 @@
+// 전체 SCSS API 진입점 (CSS 출력 없음).
+//   @use '@daracl/ui-style' as ui;
+//
+// abstracts(토큰 포함)는 접두사 없이, 나머지는 이름 충돌을 피하기 위해 접두사를 붙여 forward 한다.
+//   ui.$spacing-md, ui.flex-center        (abstracts / tokens)
+//   ui.theme-define-themes, ui.theme-get-theme   (themes)
+//   ui.base-keyframes, ui.base-spinner    (base)
+//   ui.util-helpers, ui.util-scrollbar    (utilities)
+// 접두사 없이 쓰고 싶으면 서브 경로(@use '@daracl/ui-style/themes')를 사용한다.
+@forward 'abstracts';
+@forward 'themes' as theme-*;
+@forward 'base' as base-*;
+@forward 'utilities' as util-*;

@@ -1,0 +1,38 @@
+@use '../abstracts/functions' as fn;
+@use '../abstracts/variables';
+@use '../tokens';
+
+// 네이티브 스크롤바 스타일. 색은 ui-grid 의 scroll-* 테마 변수를 사용한다.
+// (ui-grid 의 .dg-scroll-* 는 JS 가상 스크롤용 DOM 이라 공통화하지 않았다.)
+@mixin scrollbar($size: tokens.$scrollbar-size, $prefix: variables.$prefix, $radius: 0.5em) {
+  scrollbar-width: thin; // Firefox
+  scrollbar-color: #{fn.token(scroll-thumb-bg, $prefix: $prefix)} #{fn.token(scroll-track-bg, $prefix: $prefix)};
+
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-corner {
+    background-color: fn.token(scroll-track-bg, $prefix: $prefix);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: $radius;
+    background-color: fn.token(scroll-thumb-bg, $prefix: $prefix);
+
+    &:hover {
+      background-color: fn.token(scroll-thumb-hover-bg, $prefix: $prefix);
+    }
+  }
+}
+
+@mixin scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

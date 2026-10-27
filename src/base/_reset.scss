@@ -1,0 +1,27 @@
+@use '../abstracts/functions' as fn;
+@use '../abstracts/variables';
+@use '../tokens';
+
+// ui-grid base.scss 의 `*` 규칙을 일반화한 것이다. 반드시 $scope(컴포넌트 루트)를 지정해 전역 오염을 막는다.
+//   .daracl-foo { @include reset; }          -> 루트 + 모든 하위 요소
+@mixin reset($prefix: variables.$prefix) {
+  &,
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+
+  & * {
+    border-spacing: 0;
+    border-collapse: separate;
+  }
+}
+
+// 컴포넌트 루트의 기본 글꼴 / 글자색. 하위 요소는 상속한다. (ui-grid 는 `*` 에 직접 지정하지만 상속이 더 가볍다.)
+@mixin root-typography($prefix: variables.$prefix, $size: tokens.$font-size-xs) {
+  font-family: tokens.$font-family;
+  font-size: $size;
+  line-height: tokens.$line-height-base;
+  color: fn.token(font-color, $prefix: $prefix);
+}

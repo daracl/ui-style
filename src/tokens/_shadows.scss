@@ -1,0 +1,23 @@
+// 그림자 토큰. 각 값은 기존 프로젝트에서 사용 중인 box-shadow 를 단계화한 것이다.
+
+// ui-grid hidden component, ui-tree dropdown
+$shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1) !default;
+// ui-report-studio page-shadow (light)
+$shadow-page: 0 1px 3px rgba(15, 23, 42, 0.12) !default;
+// ui-report-studio palette drag ghost
+$shadow-md: 0 6px 18px rgba(15, 23, 42, 0.2) !default;
+// ui-drift dragging item
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.22) !default;
+// ui-datetimepicker popup (Material elevation 8)
+$shadow-popup: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12) !default;
+// ui-grid selected cell (inset outline)
+$shadow-focus-ring: 0 0 0 2px rgba(37, 99, 235, 0.25) !default;
+
+$shadows: (
+  sm: $shadow-sm,
+  page: $shadow-page,
+  md: $shadow-md,
+  lg: $shadow-lg,
+  popup: $shadow-popup,
+  focus-ring: $shadow-focus-ring,
+) !default;

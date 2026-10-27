@@ -1,0 +1,79 @@
+// 색상 팔레트. 값은 ui-grid / ui-form / ui-role-builder / ui-report-studio / ui-datetimepicker / ui-toast 에서 추출했다.
+// 팔레트는 "원시 값"이다. 컴포넌트에서는 가능하면 themes 의 의미(semantic) 토큰(var(--dui-*))을 사용한다.
+
+$white: #ffffff !default;
+$black: #000000 !default;
+
+// ---- Neutral (light 계열) : ui-grid light theme ----
+$gray-50: #f9f9f9 !default; // cell-bg-linenumber
+$gray-100: #f3f3f3 !default; // cell-bg-hover
+$gray-150: #f0f0f0 !default; // body-bg-thin
+$gray-200: #ebebeb !default; // disabled-bg / tab-bg-hover
+$gray-250: #e3e3e3 !default; // button-bg-hover
+$gray-300: #d2d2d2 !default; // body-bg-hover
+$gray-400: #cdcdcd !default; // border-color
+$gray-450: #b9bdc1 !default; // border-thick-color
+$gray-500: #a5a5a5 !default; // scroll-thumb-bg
+$gray-600: #686868 !default; // font-color
+$gray-700: #3a3d41 !default; // font-hover-color
+$gray-900: #212529 !default; // input-color
+
+// ---- Neutral (dark 계열) : ui-grid dark theme ----
+$dark-100: #e0e0e0 !default; // font-color
+$dark-200: #979797 !default; // check-bg
+$dark-300: #727272 !default; // button-bg-hover
+$dark-400: #585858 !default; // border-color
+$dark-500: #444444 !default; // tooltip-bg / body-bg-thin
+$dark-600: #333333 !default; // scroll-button-bg
+$dark-700: #2c2c2c !default; // tab-bg / summary-bg
+$dark-800: #2a2a2a !default; // input-bg
+$dark-850: #1e1e1e !default; // scroll-bg
+$dark-900: #1a1a1a !default; // body-bg
+
+// ---- Brand / Accent ----
+$primary: #0d6efd !default; // ui-grid .dg-primary
+$primary-hover: #0b5ed7 !default;
+$accent: #2563eb !default; // ui-drift / ui-report-studio primary
+$accent-soft: rgba(37, 99, 235, 0.08) !default; // report-studio placeholder-bg
+$link: #1a73e8 !default; // ui-grid item-check-color (light)
+$link-dark: #68a9ff !default; // item-check-color (dark)
+$selection: #337ab7 !default; // ui-tree / ui-multiSelect body-active-bg
+$selection-border: #4762fa !default; // ui-grid cell-selection-border (light)
+$selection-border-dark: #47dcfa !default;
+$selection-bg: #e9faff !default; // ui-grid cell-bg-selection (light)
+$selection-bg-dark: #264f78 !default;
+
+// ---- Status ----
+// 두 계열이 존재한다. 의미가 다르므로 통합하지 않는다.
+//  1) Alert 계열 : ui-toast / ui-datetimepicker 의 --success / --error / --warning / --info
+//  2) Bootstrap 계열 : ui-grid 의 .dg-success / .dg-danger ... 버튼 색
+$success: #0abf30 !default;
+$error: #e24d4c !default;
+$warning: #e9bd0c !default;
+$info: #3498db !default;
+
+$btn-success: #198754 !default;
+$btn-danger: #dc3545 !default;
+$btn-warning: #ffc107 !default;
+$btn-info: #0dcaf0 !default;
+$btn-secondary: #6c757d !default;
+
+$danger: #d9534f !default; // status-danger-color (light), form color-danger
+$danger-dark: #ff6b6b !default;
+$required: #ff4136 !default; // required / invalid-font-color (light)
+$required-dark: #ff9b9b !default;
+$invalid-border: #ffb6b4 !default;
+$invalid-border-dark: #ff5e5e !default;
+$invalid-bg: #ffdddd !default; // #fdd
+$invalid-bg-dark: #3a1f1f !default;
+
+// ---- Overlay ----
+$overlay: rgba(15, 23, 42, 0.45) !default; // report-studio overlay-bg
+$shadow-color: rgba(15, 23, 42, 0.12) !default;
+
+// ---- Icon ----
+// 배경이 없는 곳 / 배경이 색상인 곳의 stroke
+$icon-stroke: #5a5858 !default;
+$icon-stroke-dark: #fffbfb !default;
+$icon-stroke-on-color: #ffffff !default;
+$icon-fill-stroke-on-color: #494949 !default;

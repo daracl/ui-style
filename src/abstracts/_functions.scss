@@ -1,0 +1,64 @@
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+@use '../tokens';
+@use 'variables';
+
+@function _lookup($map, $key, $kind) {
+  @if not map.has-key($map, $key) {
+    @error "Unknown #{$kind} token '#{$key}'. Available: #{map.keys($map)}";
+  }
+  @return map.get($map, $key);
+}
+
+// 토큰 조회 : space(md) -> 12px
+@function space($key) {
+  @return _lookup(tokens.$spacing, $key, 'spacing');
+}
+
+@function radius($key) {
+  @return _lookup(tokens.$radii, $key, 'radius');
+}
+
+@function shadow($key) {
+  @return _lookup(tokens.$shadows, $key, 'shadow');
+}
+
+@function font-size($key) {
+  @return _lookup(tokens.$font-sizes, $key, 'font-size');
+}
+
+@function z($layer, $offset: 0) {
+  @return _lookup(tokens.$z-layers, $layer, 'z-index') + $offset;
+}
+
+// 테마 CSS 변수 참조 : token(border-color) -> var(--dui-border-color)
+//                      token(border-color, #ccc) -> var(--dui-border-color, #ccc)
+// 접두사 없는 기존 변수(--border-color)를 참조해야 하면 $prefix: '' 를 전달한다.
+@function token($name, $fallback: null, $prefix: variables.$prefix) {
+  $var: css-var-name($name, $prefix);
+  @if $fallback == null {
+    @return var(#{$var});
+  }
+  @return var(#{$var}, #{$fallback});
+}
+
+// css-var-name(border-color) -> --dui-border-color
+@function css-var-name($name, $prefix: variables.$prefix) {
+  @if $prefix == '' or $prefix == null {
+    @return '--#{$name}';
+  }
+  @return '--#{$prefix}-#{$name}';
+}
+
+@function strip-unit($number) {
+  @if meta.type-of($number) == 'number' and not math.is-unitless($number) {
+    @return math.div($number, ($number * 0 + 1));
+  }
+  @return $number;
+}
+
+// px -> rem
+@function rem($px, $base: 16px) {
+  @return math.div(strip-unit($px), strip-unit($base)) * 1rem;
+}

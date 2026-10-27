@@ -1,0 +1,31 @@
+// 간격 토큰. ui-form(field-margin-top 10px, field-padding-top 3px, field-padding-right 15px),
+// ui-grid(padding 0 8px 0 5px, 28px 컨트롤)의 값을 기준으로 4px 단위 스케일을 구성했다.
+
+$spacing-0: 0 !default;
+$spacing-2xs: 2px !default;
+$spacing-xs: 4px !default;
+$spacing-sm: 8px !default;
+$spacing-md: 12px !default;
+$spacing-lg: 16px !default;
+$spacing-xl: 24px !default;
+$spacing-2xl: 32px !default;
+
+// ui-form 의 필드 간격
+$field-margin-top: 10px !default;
+$field-padding-top: 3px !default;
+$field-padding-right: 15px !default;
+
+// 입력 요소 내부 padding (ui-grid / ui-form / ui-report-studio 공통: `0 8px 0 5px`)
+$control-padding: 0 8px 0 5px !default;
+$control-padding-button: 0 10px !default;
+
+$spacing: (
+  0: $spacing-0,
+  2xs: $spacing-2xs,
+  xs: $spacing-xs,
+  sm: $spacing-sm,
+  md: $spacing-md,
+  lg: $spacing-lg,
+  xl: $spacing-xl,
+  2xl: $spacing-2xl,
+) !default;

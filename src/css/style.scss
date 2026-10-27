@@ -1,0 +1,10 @@
+// CSS 빌드 진입점 -> dist/style.css
+// SCSS 를 쓰지 않는 프로젝트(또는 런타임 테마 전환)용 공통 CSS. 전역 요소 선택자(`*`, `body` 등)는 출력하지 않는다.
+@use '../themes';
+@use '../base';
+@use '../utilities';
+
+@include themes.define-themes($auto-dark: true);
+@include base.keyframes;
+@include utilities.helpers;
+@include utilities.variants;

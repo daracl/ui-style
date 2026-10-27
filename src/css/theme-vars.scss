@@ -1,0 +1,4 @@
+// CSS 빌드 진입점 -> dist/theme-vars.css (테마 CSS 변수만)
+@use '../themes';
+
+@include themes.define-themes($auto-dark: true);

@@ -1,0 +1,26 @@
+// 타이포그래피 토큰. ui-components / ui-report-studio 의 $font-family, $font-size* 와 ui-form 의 font-size* 를 통합했다.
+
+$font-family: -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif !default;
+$font-family-mono: Consolas, 'D2Coding', monospace !default;
+
+$font-size-2xs: 11px !default; // ui-components $font-size-tiny
+$font-size-xs: 12px !default; // $font-size-small / $control-font-size / ui-grid 기본
+$font-size-sm: 13px !default; // ui-components / report-studio 기본
+$font-size-md: 14px !default; // ui-form font-size
+$font-size-lg: 16px !default; // ui-form font-size-lg
+
+$font-weight-normal: 400 !default;
+$font-weight-medium: 500 !default;
+$font-weight-bold: 700 !default;
+
+$line-height-tight: 1.2 !default; // 컨트롤 (ui-grid / ui-form)
+$line-height-base: 1.5 !default; // ui-form line-height-lg
+$line-height-grid: 1.6 !default; // ui-grid 전역 `line-height: 1.6em`
+
+$font-sizes: (
+  2xs: $font-size-2xs,
+  xs: $font-size-xs,
+  sm: $font-size-sm,
+  md: $font-size-md,
+  lg: $font-size-lg,
+) !default;

@@ -1,0 +1,40 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+// 기존 프로젝트에서 실제로 쓰이는 너비를 기준으로 했다.
+//  - 720px : ui-components $config-layout-breakpoint (Config UI 가 세로 배치로 전환)
+//  - 960px : ui-report-studio $narrow-breakpoint (좌 / 우 패널이 overlay 로 전환)
+// 컴포넌트는 viewport 가 아니라 container 너비 기준으로 동작하는 경우가 많으므로, 이 값은 @media 용 기본값이다.
+$breakpoint-sm: 720px !default;
+$breakpoint-md: 960px !default;
+$breakpoint-lg: 1280px !default;
+
+$breakpoints: (
+  sm: $breakpoint-sm,
+  md: $breakpoint-md,
+  lg: $breakpoint-lg,
+) !default;
+
+@function breakpoint($name) {
+  @if meta.type-of($name) == 'number' {
+    @return $name;
+  }
+  @if not map.has-key($breakpoints, $name) {
+    @error "Unknown breakpoint '#{$name}'. Available: #{map.keys($breakpoints)}";
+  }
+  @return map.get($breakpoints, $name);
+}
+
+// 지정한 너비 이상
+@mixin respond-above($name) {
+  @media (min-width: breakpoint($name)) {
+    @content;
+  }
+}
+
+// 지정한 너비 미만
+@mixin respond-below($name) {
+  @media (max-width: breakpoint($name) - 0.02px) {
+    @content;
+  }
+}

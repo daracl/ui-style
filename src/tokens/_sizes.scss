@@ -1,0 +1,20 @@
+// 크기 토큰
+
+// 입력 요소 (ui-grid Form Controls 와 같은 값이 ui-form / ui-components / ui-report-studio 에 중복되어 있다)
+$control-height: 28px !default;
+$control-radius: 4px !default;
+$control-font-size: 12px !default;
+
+$line-height-px: 30px !default; // ui-grid $line_height
+
+// 스크롤바 (ui-grid custom scroll)
+$scrollbar-size: 12px !default;
+$scrollbar-size-thin: 8px !default;
+
+// 터치 타겟 (ui-drift)
+$touch-target: 44px !default;
+
+// 아이콘
+$icon-size-sm: 16px !default;
+$icon-size-md: 20px !default;
+$icon-size-lg: 24px !default;

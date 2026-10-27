@@ -1,0 +1,77 @@
+{
+  "name": "@daracl/ui-style",
+  "version": "0.0.1",
+  "description": "Daracl UI shared SCSS: design tokens, themes, mixins and utilities",
+  "author": {
+    "name": "darainfo",
+    "email": "darainfosys@gmail.com",
+    "url": "https://www.moaview.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "daracl",
+    "darainfo",
+    "scss",
+    "sass",
+    "design-tokens",
+    "theme"
+  ],
+  "homepage": "https://github.com/daracl/ui-style",
+  "bugs": {
+    "url": "https://github.com/daracl/ui-style/issues",
+    "email": "darainfosys@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daracl/ui-style.git"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "sass": "./src/index.scss",
+  "style": "./dist/style.css",
+  "exports": {
+    ".": {
+      "sass": "./src/index.scss",
+      "default": "./src/index.scss"
+    },
+    "./abstracts": {
+      "sass": "./src/abstracts/_index.scss",
+      "default": "./src/abstracts/_index.scss"
+    },
+    "./tokens": {
+      "sass": "./src/tokens/_index.scss",
+      "default": "./src/tokens/_index.scss"
+    },
+    "./themes": {
+      "sass": "./src/themes/_index.scss",
+      "default": "./src/themes/_index.scss"
+    },
+    "./base": {
+      "sass": "./src/base/_index.scss",
+      "default": "./src/base/_index.scss"
+    },
+    "./utilities": {
+      "sass": "./src/utilities/_index.scss",
+      "default": "./src/utilities/_index.scss"
+    },
+    "./style.css": "./dist/style.css",
+    "./theme-vars.css": "./dist/theme-vars.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "yarn clean && yarn build:css && yarn build:css:min",
+    "build:css": "sass --no-source-map --load-path=src src/css/style.scss:dist/style.css src/css/theme-vars.scss:dist/theme-vars.css",
+    "build:css:min": "sass --no-source-map --style=compressed --load-path=src src/css/style.scss:dist/style.min.css src/css/theme-vars.scss:dist/theme-vars.min.css",
+    "test": "yarn build && node scripts/verify.mjs",
+    "prepack": "yarn build"
+  },
+  "devDependencies": {
+    "sass": "^1.80.2"
+  }
+}

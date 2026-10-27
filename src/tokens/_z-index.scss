@@ -1,0 +1,32 @@
+// z-index 레이어. 기존 프로젝트의 값(1 / 2 / 3 / 10 / 100 / 1000 / 10000)을 의미 단위로 정리했다.
+//  - 컴포넌트 내부 stacking : 0 ~ 3 (ui-grid header / scroll / fixed column)
+//  - sticky / 고정 요소 : 10 ~ 100 (ui-grid toolbar 100, body 10)
+//  - dropdown / popup : 1000 (ui-datetimepicker, ui-tree, ui-dialog 오버레이, ui-toast 컨테이너)
+//  - 최상위 : 10000 (ui-dialog / ui-toast 본문, ui-grid contextmenu)
+//  - ui-drift 의 드래그 고스트는 2147483000 (페이지 전체 위) 를 사용한다.
+
+$z-base: 0 !default;
+$z-raised: 1 !default;
+$z-raised-2: 2 !default;
+$z-raised-3: 3 !default;
+$z-sticky: 10 !default;
+$z-overlay-local: 100 !default;
+$z-dropdown: 1000 !default;
+$z-modal: 10000 !default;
+$z-toast: 10000 !default;
+$z-contextmenu: 10000 !default;
+$z-drag-ghost: 2147483000 !default;
+
+$z-layers: (
+  base: $z-base,
+  raised: $z-raised,
+  raised-2: $z-raised-2,
+  raised-3: $z-raised-3,
+  sticky: $z-sticky,
+  overlay-local: $z-overlay-local,
+  dropdown: $z-dropdown,
+  modal: $z-modal,
+  toast: $z-toast,
+  contextmenu: $z-contextmenu,
+  drag-ghost: $z-drag-ghost,
+) !default;
