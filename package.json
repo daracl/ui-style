@@ -1,6 +1,6 @@
 {
   "name": "@daracl/ui-style",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Daracl UI shared SCSS: design tokens, themes, mixins and utilities",
   "author": {
     "name": "darainfo",
@@ -88,7 +88,8 @@
     "build:guide": "node scripts/build-guide.mjs",
     "build:css": "sass --no-source-map --load-path=src src/css/style.scss:dist/style.css src/css/theme-vars.scss:dist/theme-vars.css",
     "build:css:min": "sass --no-source-map --style=compressed --load-path=src src/css/style.scss:dist/style.min.css src/css/theme-vars.scss:dist/theme-vars.min.css",
-    "test": "yarn build && node scripts/verify.mjs",
+    "lint:rules": "node scripts/lint-rules.mjs",
+    "test": "yarn build && yarn lint:rules && node scripts/verify.mjs",
     "prepack": "yarn build"
   },
   "devDependencies": {

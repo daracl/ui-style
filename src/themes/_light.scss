@@ -11,10 +11,11 @@ $theme: map.merge(
     // ---- 글자 ----
     font-color: #222222,
     label-color: #444444,
+    font-soft-color: #4a4a4a, // 파생 (font-color 보다 연한 본문용. 흰 바탕 9:1)
     // 두 프로젝트에 hover 글자색이 없다. 기본 글자(#222)보다 진해야 하므로 검정으로 파생.
     font-hover-color: tokens.$black,
     font-disable-color: #9aa1ab, // components disabled-color
-    muted-color: #8a919c,
+    muted-color: #626976, // 파생 (body-bg 5.5:1 / body-bg-thin 4.8:1)
     // ---- 테두리 ----
     border-color: #d9dde3,
     border-thick-color: tokens.$gray-450, // ui-grid (입력 요소 hover 테두리)
@@ -46,8 +47,8 @@ $theme: map.merge(
     error-color: #b42318,
     error-bg: #fff4f4,
     error-border-color: #f0b4b4,
-    required-color: tokens.$required, // ui-grid
-    invalid-font-color: tokens.$required, // ui-grid
+    required-color: #d92d20, // 파생 (body-bg 4.8:1). 기존 tokens.$required #ff4136 은 3.5:1
+    invalid-font-color: #c4281c, // 파생 (invalid-bg 4.5:1). 기존 tokens.$required #ff4136 은 2.8:1
     invalid-border-color: tokens.$invalid-border, // ui-grid
     invalid-bg: tokens.$invalid-bg, // ui-grid
     // ---- hover / selected 쌍 ----

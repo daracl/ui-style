@@ -47,7 +47,7 @@ for (const file of ['dist/style.css', 'dist/theme-vars.css', 'dist/style.min.css
 const css = readFileSync(join(root, 'dist/style.css'), 'utf8');
 const themesCss = readFileSync(join(root, 'dist/theme-vars.css'), 'utf8');
 check('light 변수가 :root 에 출력된다', /:root[^{]*\{[^}]*--dui-body-bg: #ffffff/s.test(css));
-check('dark 변수가 [data-daracl-theme=dark] 에 출력된다', /\[data-daracl-theme=dark\][^{]*\{[^}]*--dui-body-bg: #1f2836/s.test(css));
+check('dark 변수가 [data-daracl-theme=dark] 에 출력된다', /\[data-daracl-theme=dark\][^{]*\{[^}]*--dui-body-bg: #141414/s.test(css));
 // hover / selected / active 는 배경과 글자색이 항상 쌍으로 존재해야 한다.
 for (const name of ['hover', 'hover-accent', 'selected', 'active']) {
   const bg = new RegExp(`--dui-${name}-bg:`, 'g');
@@ -112,7 +112,7 @@ try {
     .grid { @include themes.theme-vars(themes.get-theme(dark), $prefix: ''); }
     @include themes.define-themes('.daracl-grid');
   `);
-  check('themes: 접두사 없는 호환 변수 출력', themes.includes('--border-color: #3a4456'));
+  check('themes: 접두사 없는 호환 변수 출력', themes.includes('--border-color: #4c4d4f'));
   check('themes: 컴포넌트 스코프 선택자', themes.includes('[data-daracl-theme=dark] .daracl-grid') && themes.includes('.daracl-grid[data-daracl-theme=dark]'));
 
   const multi = compile(`
@@ -138,6 +138,24 @@ try {
     'themes: scope + OS 다크는 :where 로 특이도를 낮춰 명시 값이 이긴다',
     multi.includes(':where(:root:not([data-daracl-theme])) .daracl-grid, :where(:root:not([data-daracl-theme])) .dg-hidden-layers') &&
       multi.indexOf('prefers-color-scheme') < multi.indexOf('[data-daracl-theme=dark] .daracl-grid')
+  );
+
+  const defaults = compile(`
+    @use '@daracl/ui-style/themes' as themes;
+    @include themes.define-theme-defaults;
+  `);
+  const defSelectors = defaults.split('\n').filter((line) => line.endsWith('{') && !line.startsWith(' ')).map((line) => line.trim());
+  check(
+    'themes: define-theme-defaults 는 모든 선택자의 특이도가 0 이다 (:where)',
+    defSelectors.length > 0 && defSelectors.every((s) => s.startsWith(':where(') || s.startsWith('@')),
+    defSelectors.join('\n')
+  );
+  check(
+    'themes: define-theme-defaults 순서 = 기본(light) -> OS 다크 -> 명시 dark',
+    defaults.indexOf(":where(:root, [data-daracl-theme=light])") !== -1 &&
+      defaults.indexOf(":where(:root, [data-daracl-theme=light])") < defaults.indexOf('prefers-color-scheme') &&
+      defaults.indexOf('prefers-color-scheme') < defaults.indexOf(":where([data-daracl-theme=dark])"),
+    defaults.slice(0, 300)
   );
 
   const custom = compile(`

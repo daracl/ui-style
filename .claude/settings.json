@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn test)",
+      "Bash(yarn build)",
+      "Bash(yarn build:*)",
+      "Bash(yarn lint:rules)",
+      "Bash(node scripts/*)",
+      "Bash(npm pack --dry-run*)"
+    ],
+    "deny": [
+      "Edit(dist/**)",
+      "Edit(docs/guide.html)",
+      "Bash(npm publish*)",
+      "Bash(yarn publish*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hook-check.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}

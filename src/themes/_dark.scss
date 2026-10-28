@@ -2,62 +2,63 @@
 @use '../tokens';
 @use 'common';
 
-// 기준은 ui-components / ui-report-studio dark theme(남색 계열)이다.
-// 두 프로젝트에 없는 항목은 아래 규칙으로 채웠다.
-//  - ui-grid / ui-tree 등에서 가져온 값 : 출처 표기
-//  - 남색 바탕과 어울리도록 새로 정한 값 : "파생" 표기 (실제 화면에서 검토 필요)
+// 기준은 Element Plus dark theme(중립 회색 계열)이다. (theme-chalk/dark/css-vars.css)
+//  - 배경 : bg-color-page #0a0a0a / bg-color #141414 / bg-color-overlay #1d1e1f, 깊을수록 어둡고 떠 있는 면일수록 밝다
+//  - 글자 / 테두리 / fill : 흰색 계열 알파 합성 단계값을 그대로 사용 ("Element" 표기)
+//  - ui-grid 에서 가져온 값(체크 / 아이콘 / 선택 / 검증색) : 출처 표기
+//  - 위에 없는 항목을 새로 정한 값 : "파생" 표기 (실제 화면에서 검토 필요)
 $theme: map.merge(
   common.$theme-common,
   (
     // ---- 글자 ----
-    font-color: #dddddd,
-    label-color: #c5ccd6,
-    font-hover-color: tokens.$white, // 파생
-    font-disable-color: #6b7482, // components disabled-color
-    muted-color: #8d96a3,
+    font-color: #cfd3dc, // Element text-color-regular
+    label-color: #a3a6ad, // Element text-color-secondary
+    font-soft-color: #b9bdc6, // 파생 (font-color #cfd3dc 와 text-color-secondary 사이. bg-color 위 9:1 이상)
+    font-hover-color: #e5eaf3, // Element text-color-primary
+    font-disable-color: #6c6e72, // Element text-color-disabled
+    muted-color: #8d9095, // Element text-color-placeholder
     // ---- 테두리 ----
-    border-color: #3a4456,
-    border-thick-color: #807e7e, // ui-grid (입력 요소 hover 테두리)
-    border-light-color: #3a4456,
-    divider-color: #4a5466,
+    border-color: #4c4d4f, // Element border-color
+    border-thick-color: #636466, // Element border-color-darker (입력 요소 hover 테두리)
+    border-light-color: #363637, // Element border-color-lighter
+    divider-color: #58585b, // Element border-color-dark
     // ---- 배경 ----
-    body-bg: #1f2836,
-    body-bg-thin: #273244, // 파생 (report-studio table-header-bg)
-    body-bg-deep: #2f3b4f, // 파생. 깊을수록 밝아지는 ui-role-builder 중첩 규칙을 유지하기 위해 body-bg-thin(#273244) 보다 밝게
-    body-bg-hover: #2f3b4f, // 파생 (hover-bg 와 동일)
-    disabled-bg: #555555, // components input-disabled-bg
-    panel-header-bg: #18202c, // report-studio
-    // ---- 입력 요소 (ui-grid 값. 두 프로젝트도 동일하게 사용) ----
-    input-bg: tokens.$dark-800,
-    input-color: #f0f0f0,
-    input-border-color: tokens.$dark-400,
-    input-border-hover-color: #807e7e,
-    input-disabled-bg: #555555,
+    body-bg: #141414, // Element bg-color
+    body-bg-thin: #1d1e1f, // Element bg-color-overlay
+    body-bg-deep: #262727, // Element fill-color-light. 깊을수록 밝아지는 ui-role-builder 중첩 규칙을 유지하기 위해 body-bg-thin(#1d1e1f) 보다 밝게
+    body-bg-hover: #303030, // Element fill-color (hover-bg 와 동일)
+    disabled-bg: #262727, // Element fill-color-light
+    panel-header-bg: #0a0a0a, // Element bg-color-page
+    // ---- 입력 요소 ----
+    input-bg: #141414, // Element fill-color-blank
+    input-color: #e5eaf3, // Element text-color-primary
+    input-border-color: #4c4d4f, // Element border-color
+    input-border-hover-color: #636466, // Element border-color-darker
+    input-disabled-bg: #262727, // Element fill-color-light
     // ---- 버튼 / 탭 ----
-    button-bg: #2a3444,
-    button-border-color: #444c5c,
-    // components 는 ui-grid 값(#727272)을 그대로 쓰고 report-studio 만 #3a4558 이다. 남색 바탕에 맞는 report-studio 값을 채택.
-    button-hover-bg: #3a4558,
-    button-bg-active: #444c5c, // 파생 (button-border-color 와 동일)
-    tab-bg: #18202c, // 파생 (panel-header-bg 와 동일)
-    tab-bg-hover: #2f3b4f, // 파생
+    button-bg: #1d1e1f, // 파생 (bg-color-overlay)
+    button-border-color: #4c4d4f, // Element border-color
+    button-hover-bg: #303030, // Element fill-color
+    button-bg-active: #39393a, // Element fill-color-dark
+    tab-bg: #0a0a0a, // 파생 (panel-header-bg 와 동일)
+    tab-bg-hover: #262727, // 파생 (fill-color-light)
     // ---- 툴팁 ----
-    tooltip-bg: tokens.$dark-500, // ui-grid
+    tooltip-bg: #303030, // 파생 (Element fill-color)
     // ---- 오류 / 검증 ----
-    error-color: #ff8a80,
-    error-bg: #3a2326,
-    error-border-color: #6b3036,
+    error-color: #f56c6c, // Element danger
+    error-bg: #2b1d1d, // Element danger-light-9 (dark)
+    error-border-color: #582e2e, // Element danger-light-7 (dark)
     required-color: tokens.$required-dark, // ui-grid
     invalid-font-color: tokens.$required-dark, // ui-grid
     invalid-border-color: tokens.$invalid-border-dark, // ui-grid
     invalid-bg: tokens.$invalid-bg-dark, // ui-grid
     // ---- hover / selected 쌍 ----
-    hover-bg: #2f3b4f,
-    hover-color: tokens.$white, // 파생
-    hover-accent-bg: #1f3d5c, // 파생 (ui-tree dark 는 밝은 하늘색 + 검정 글자라 쌍이 맞지 않음)
-    hover-accent-color: tokens.$white, // 파생
+    hover-bg: #303030, // Element fill-color
+    hover-color: #e5eaf3, // 파생 (font-hover-color 와 동일)
+    hover-accent-bg: #213d5b, // Element primary-light-7 (dark). ui-tree dark 는 밝은 하늘색 + 검정 글자라 쌍이 맞지 않음
+    hover-accent-color: #e5eaf3, // 파생 (font-hover-color 와 동일)
     selected-bg: tokens.$selection-bg-dark, // ui-grid cell-bg-selection / item-selected
-    selected-color: tokens.$white, // 파생
+    selected-color: #e5eaf3, // 파생 (font-hover-color 와 동일)
     selected-border-color: tokens.$selection-border-dark, // ui-grid
     item-check-color: tokens.$link-dark, // ui-grid
     search-match-color: #1fa0ff, // ui-tree dark item-search-font-color
@@ -68,19 +69,19 @@ $theme: map.merge(
     check-active-bg: #00c1ff,
     check-mark-color: #4e4e4e,
     check-indeterminate-bg: tokens.$icon-stroke-dark,
-    // ---- 스크롤 : 남색 바탕에 맞춰 파생 ----
-    scroll-bg: #18202c,
-    scroll-track-bg: #18202c,
-    scroll-thumb-bg: #3a4456,
-    scroll-thumb-hover-bg: #4a5466,
-    scroll-button-bg: #2a3444,
+    // ---- 스크롤 : 중립 회색 바탕에 맞춰 파생 ----
+    scroll-bg: #141414,
+    scroll-track-bg: #141414,
+    scroll-thumb-bg: #424243, // Element fill-color-darker
+    scroll-thumb-hover-bg: #58585b, // Element border-color-dark
+    scroll-button-bg: #262727, // Element fill-color-light
     // ---- 아이콘 (ui-grid) ----
     icon-stroke-color: tokens.$icon-stroke-dark,
     icon-fill-stroke-color: tokens.$dark-900,
     empty-icon-color: #888888,
     // ---- 오버레이 / 그림자 ----
-    overlay-bg: rgba(0, 0, 0, 0.6),
-    shadow: 0 2px 8px rgba(0, 0, 0, 0.45),
-    page-shadow: 0 1px 4px rgba(0, 0, 0, 0.5),
+    overlay-bg: rgba(0, 0, 0, 0.8), // Element mask-color
+    shadow: 0 2px 12px rgba(0, 0, 0, 0.72), // Element box-shadow-light 참고
+    page-shadow: 0 0 6px rgba(0, 0, 0, 0.72), // Element box-shadow-lighter 참고
   )
 );

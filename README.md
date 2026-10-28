@@ -122,7 +122,7 @@ document.documentElement.setAttribute('data-daracl-theme', 'dark');
 ```scss
 $local-themes: (
   light: (header-bg: #fff),
-  dark:  (header-bg: #18202c),
+  dark:  (header-bg: #0a0a0a),
 );
 
 @include themes.define-themes('.daracl-foo, .daracl-foo-popup', $prefix: 'df', $themes: $local-themes);

@@ -34,7 +34,7 @@ const dark = readBlock(themeCss, '[data-daracl-theme=dark]');
 
 // 키 설명. 새 키가 추가됐는데 설명이 없으면 경고한다.
 const DESC = {
-  'font-color': '기본 글자색', 'label-color': '라벨 / 헤더 글자색 (기본보다 약간 연함)', 'font-hover-color': 'hover 시 글자색',
+  'font-color': '기본 글자색', 'label-color': '라벨 / 헤더 글자색 (기본보다 약간 연함)', 'font-soft-color': '본문 영역용 연한 글자색 (기본 글자색보다 한 단계 옅음)', 'font-hover-color': 'hover 시 글자색',
   'font-disable-color': '비활성 글자색', 'muted-color': '보조 설명 글자색',
   'border-color': '패널 / 표 / 탭의 기본 테두리', 'border-thick-color': '강조 테두리 (입력 요소 hover 등)', 'border-light-color': '연한 구분 테두리 (카드, 섹션)',
   'divider-color': '구분선',
@@ -62,7 +62,7 @@ const DESC = {
 };
 
 const GROUPS = [
-  ['글자', ['font-color', 'label-color', 'font-hover-color', 'font-disable-color', 'muted-color']],
+  ['글자', ['font-color', 'font-soft-color', 'label-color', 'font-hover-color', 'font-disable-color', 'muted-color']],
   ['테두리 · 구분선', ['border-color', 'border-thick-color', 'border-light-color', 'divider-color']],
   ['배경', ['body-bg', 'body-bg-thin', 'body-bg-deep', 'body-bg-hover', 'disabled-bg', 'panel-header-bg']],
   ['입력 요소', ['input-bg', 'input-color', 'input-border-color', 'input-border-hover-color', 'input-disabled-bg']],
@@ -180,6 +180,7 @@ const API = [
   ['themes', 'mixin', 'theme', 'theme($name, $prefix, $themes)', '이름으로 테마 변수를 출력 (그리드별 테마처럼 한 요소에 직접 지정할 때)'],
   ['themes', 'mixin', 'define-theme', 'define-theme($name, $default, $scope, $prefix, $themes)', '한 테마를 <code>[data-daracl-theme]</code> 선택자와 함께 출력'],
   ['themes', 'mixin', 'define-themes', 'define-themes($scope, $default, $auto-dark, $prefix, $themes)', '등록된 모든 테마 출력. <code>$scope</code> 가 쉼표 목록이어도 항목별로 처리. <code>$auto-dark</code> 는 OS 설정 대응'],
+  ['themes', 'mixin', 'define-theme-defaults', 'define-theme-defaults($default, $prefix, $themes)', '특이도 0(<code>:where</code>)으로 light / dark 변수를 출력. <code>theme-vars.css</code> 없이도 동작하고 앱 값이 항상 우선. 속성이 붙은 요소만 다른 테마로 표시 가능. 컴포넌트 라이브러리 CSS 에서 한 번만 호출'],
   ['base', 'mixin', 'reset', 'reset', '컴포넌트 범위의 box-sizing / border-spacing 초기화'],
   ['base', 'mixin', 'root-typography', 'root-typography($prefix, $size)', '루트 글꼴 / 글자색'],
   ['base', 'mixin', 'keyframes-fade', 'keyframes-fade($prefix: dui)', '<code>@keyframes {prefix}-fade-in / -fade-out</code> 만 출력'],
@@ -456,12 +457,9 @@ ${apiSections}
   <li><code>helpers</code>, <code>keyframes</code>, <code>define-themes()</code> 를 여러 컴포넌트에서 반복 호출 — 호출할 때마다 CSS 가 출력됩니다. 앱 진입 CSS 에서 한 번만 호출하거나 <code>style.css</code> 를 쓰세요.</li>
 </ul>
 <h3>개별 영역 / 인스턴스 테마</h3>
-<p>한 컴포넌트만 다른 테마로 보여야 한다면 그 요소에서 <code>themes.theme($name)</code> 으로 <code>--dui-*</code> 전체를 지정합니다. (ui-grid 의 <code>dg-dark</code>, ui-components 의 <code>data-theme</code> 가 이 방식입니다.)</p>
-${code('scss', `// 영역 단위 테마: 공통(--dui-*) + 전용(--dg-*) 을 함께 지정
-.daracl-grid .dg-layout.dg-dark {
-  @include themes.theme(dark);
-  @include themes.theme(dark, $prefix: 'dg', $themes: $grid-themes);
-}`)}
+<p>한 컴포넌트만 다른 테마로 보여야 한다면 그 요소에서 <code>themes.theme($name)</code> 으로 <code>--dui-*</code> 전체를 지정합니다. (ui-components 의 <code>data-theme</code> 가 이 방식입니다.) 요소에 <code>data-daracl-theme="dark"</code> 속성만 지정해도 됩니다 — <code>theme-vars.css</code> 와 <code>define-theme-defaults()</code> 가 속성이 붙은 모든 요소에 적용됩니다.</p>
+${code('html', `<!-- 영역 단위 테마: 속성만 지정한다. --dui-* 는 theme-vars.css(또는 define-theme-defaults)가, 전용 값(--dg-*)은 define-themes() 가 출력한다 -->
+<div class="daracl-grid" data-daracl-theme="dark">…</div>`)}
 <h3>JS 에서 색을 읽어야 할 때</h3>
 ${code('js', `// 값이 비어 있을 수 있으므로(theme-vars.css 미로드) 반드시 fallback 을 둔다
 const c = getComputedStyle(el).getPropertyValue('--dui-bar-positive-bg').trim() || '#77c0fc';`)}
@@ -471,7 +469,7 @@ const c = getComputedStyle(el).getPropertyValue('--dui-bar-positive-bg').trim() 
 <h3 id="renames">변수 이름 매핑 (이전 → 현재)</h3>
 <p class="d">기존 프로젝트의 CSS 변수를 덮어써서 쓰던 앱은 아래 이름으로 바꿔야 합니다. 이전 이름의 alias 는 제공하지 않습니다.</p>
 <div class="tw"><table class="tt"><thead><tr><th>이전</th><th>현재 (<code>--dui-</code> 접두사)</th></tr></thead><tbody>${renameRows}</tbody></table></div>
-<div class="callout">기준값은 ui-components / ui-report-studio 의 테마입니다. 그 외 프로젝트는 글자색(<code>#222</code>), 테두리, dark 바탕(남색 <code>#1f2836</code>)이 새 기준으로 바뀌었습니다. 값의 출처와 "파생" 표시는 <code>src/themes/_light.scss</code>, <code>_dark.scss</code> 의 주석에 있습니다.</div>
+<div class="callout">기준값은 ui-components / ui-report-studio 의 테마입니다. 그 외 프로젝트는 글자색(<code>#222</code>), 테두리, dark 바탕(Element Plus 기준 중립 회색 <code>#141414</code>)이 새 기준으로 바뀌었습니다. 값의 출처와 "파생" 표시는 <code>src/themes/_light.scss</code>, <code>_dark.scss</code> 의 주석에 있습니다.</div>
 
 <h2 id="build">빌드 · 배포</h2>
 ${code('bash', `yarn install
