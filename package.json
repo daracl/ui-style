@@ -1,6 +1,6 @@
 {
   "name": "@daracl/ui-style",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Daracl UI shared SCSS: design tokens, themes, mixins and utilities",
   "author": {
     "name": "darainfo",
