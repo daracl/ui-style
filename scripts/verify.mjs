@@ -47,7 +47,7 @@ for (const file of ['dist/style.css', 'dist/theme-vars.css', 'dist/style.min.css
 const css = readFileSync(join(root, 'dist/style.css'), 'utf8');
 const themesCss = readFileSync(join(root, 'dist/theme-vars.css'), 'utf8');
 check('light 변수가 :root 에 출력된다', /:root[^{]*\{[^}]*--dui-body-bg: #ffffff/s.test(css));
-check('dark 변수가 [data-daracl-theme=dark] 에 출력된다', /\[data-daracl-theme=dark\][^{]*\{[^}]*--dui-body-bg: #141414/s.test(css));
+check('dark 변수가 [data-daracl-theme=dark] 에 출력된다', /\[data-daracl-theme=dark\][^{]*\{[^}]*--dui-body-bg: #1d1e1f/s.test(css));
 // hover / selected / active 는 배경과 글자색이 항상 쌍으로 존재해야 한다.
 for (const name of ['hover', 'hover-accent', 'selected', 'active']) {
   const bg = new RegExp(`--dui-${name}-bg:`, 'g');

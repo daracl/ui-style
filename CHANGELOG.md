@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- dark 테마 배경을 한 단계 밝게 조정(키 이름 변경 없음, 값만 변경): `body-bg` #141414 → #1d1e1f, `body-bg-thin` #1d1e1f → #262727, `body-bg-deep` #262727 → #303030, `body-bg-hover` / `hover-bg` #303030 → #39393a, `input-bg` / `scroll-bg` / `scroll-track-bg` #141414 → #1d1e1f. 소비 프로젝트의 dark 화면 배경이 달라진다
+
 - 빌드 개선(공개 API · 산출물 변화 없음): `scripts/build.mjs` 가 sass CLI 3회 + yarn 중첩 호출 대신 한 프로세스에서 `dist/` CSS(+min)와 가이드를 생성한다. `yarn test` 약 7.5s → 3.1s. `build:css` / `build:css:min` 이름은 유지
 - 보안 · 설정 정리: 배포 워크플로의 `npm install -g npm yarn` 제거(Node 24 가 npm 11 포함), `yarn install --ignore-scripts`, `timeout-minutes` 추가. `scripts/serve.mjs` 는 `127.0.0.1` 에만 바인딩하고, 경로 접두 비교 우회(`docs-x`)와 잘못된 URL 인코딩으로 인한 서버 종료를 막는다
 

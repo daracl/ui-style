@@ -3,7 +3,7 @@
 @use 'common';
 
 // 기준은 Element Plus dark theme(중립 회색 계열)이다. (theme-chalk/dark/css-vars.css)
-//  - 배경 : bg-color-page #0a0a0a / bg-color #141414 / bg-color-overlay #1d1e1f, 깊을수록 어둡고 떠 있는 면일수록 밝다
+//  - 배경 : bg-color-page #0a0a0a / body-bg #1d1e1f(bg-color-overlay) 기준으로 한 단계씩 올림, 깊을수록 어둡고 떠 있는 면일수록 밝다
 //  - 글자 / 테두리 / fill : 흰색 계열 알파 합성 단계값을 그대로 사용 ("Element" 표기)
 //  - ui-grid 에서 가져온 값(체크 / 아이콘 / 선택 / 검증색) : 출처 표기
 //  - 위에 없는 항목을 새로 정한 값 : "파생" 표기 (실제 화면에서 검토 필요)
@@ -23,14 +23,14 @@ $theme: map.merge(
     border-light-color: #363637, // Element border-color-lighter
     divider-color: #58585b, // Element border-color-dark
     // ---- 배경 ----
-    body-bg: #141414, // Element bg-color
-    body-bg-thin: #1d1e1f, // Element bg-color-overlay
-    body-bg-deep: #262727, // Element fill-color-light. 깊을수록 밝아지는 ui-role-builder 중첩 규칙을 유지하기 위해 body-bg-thin(#1d1e1f) 보다 밝게
-    body-bg-hover: #303030, // Element fill-color (hover-bg 와 동일)
+    body-bg: #1d1e1f, // Element bg-color-overlay (기존 bg-color #141414 에서 한 단계 올림)
+    body-bg-thin: #262727, // Element fill-color-light
+    body-bg-deep: #303030, // Element fill-color. 깊을수록 밝아지는 ui-role-builder 중첩 규칙을 유지하기 위해 body-bg-thin(#262727) 보다 밝게
+    body-bg-hover: #39393a, // Element fill-color-dark (hover-bg 와 동일)
     disabled-bg: #262727, // Element fill-color-light
     panel-header-bg: #0a0a0a, // Element bg-color-page
     // ---- 입력 요소 ----
-    input-bg: #141414, // Element fill-color-blank
+    input-bg: #1d1e1f, // body-bg 와 동일
     input-color: #e5eaf3, // Element text-color-primary
     input-border-color: #4c4d4f, // Element border-color
     input-border-hover-color: #636466, // Element border-color-darker
@@ -53,7 +53,7 @@ $theme: map.merge(
     invalid-border-color: tokens.$invalid-border-dark, // ui-grid
     invalid-bg: tokens.$invalid-bg-dark, // ui-grid
     // ---- hover / selected 쌍 ----
-    hover-bg: #303030, // Element fill-color
+    hover-bg: #39393a, // Element fill-color-dark (body-bg-deep #303030 위에서도 보이도록)
     hover-color: #e5eaf3, // 파생 (font-hover-color 와 동일)
     hover-accent-bg: #213d5b, // Element primary-light-7 (dark). ui-tree dark 는 밝은 하늘색 + 검정 글자라 쌍이 맞지 않음
     hover-accent-color: #e5eaf3, // 파생 (font-hover-color 와 동일)
@@ -70,8 +70,8 @@ $theme: map.merge(
     check-mark-color: #4e4e4e,
     check-indeterminate-bg: tokens.$icon-stroke-dark,
     // ---- 스크롤 : 중립 회색 바탕에 맞춰 파생 ----
-    scroll-bg: #141414,
-    scroll-track-bg: #141414,
+    scroll-bg: #1d1e1f,
+    scroll-track-bg: #1d1e1f,
     scroll-thumb-bg: #424243, // Element fill-color-darker
     scroll-thumb-hover-bg: #58585b, // Element border-color-dark
     scroll-button-bg: #262727, // Element fill-color-light
