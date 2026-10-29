@@ -88,11 +88,11 @@
     "build:guide": "node scripts/build-guide.mjs",
     "build:css": "node scripts/build.mjs --css-only",
     "build:css:min": "node scripts/build.mjs --min-only",
-    "start": "yarn build && node scripts/serve.mjs --open",
+    "start": "node scripts/build.mjs && node scripts/serve.mjs --open",
     "serve": "node scripts/serve.mjs",
     "lint:rules": "node scripts/lint-rules.mjs",
     "test": "node scripts/build.mjs && node scripts/lint-rules.mjs && node scripts/verify.mjs",
-    "prepack": "yarn build"
+    "prepack": "node scripts/build.mjs"
   },
   "devDependencies": {
     "sass": "^1.80.2"
