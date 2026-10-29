@@ -51,6 +51,7 @@ jobs:
     needs: version
     if: needs.version.outputs.changed == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
       # Trusted Publishing(OIDC)에 필요하다. 이 권한이 있으면 npm 이 토큰보다 OIDC 를 먼저 시도하므로,
@@ -74,9 +75,10 @@ jobs:
             oidc|token) ;;
             *) echo 'NPM_AUTH_MODE must be oidc or token.' >&2; exit 1 ;;
           esac
-      - name: Set up package managers
+      - name: Show tool versions
+        # Node 24 에는 npm 11(Trusted Publishing 지원)이 포함되고 러너에 yarn 1.22 가 설치되어 있다.
+        # 전역 설치(npm install -g)를 하지 않아 공급망 노출과 설치 시간을 줄인다.
         run: |
-          npm install --global npm@11 yarn@1.22.22
           node --version
           npm --version
           yarn --version
@@ -94,7 +96,8 @@ jobs:
           fi
       - name: Install dependencies
         if: steps.published.outputs.exists == 'false'
-        run: yarn install --non-interactive --frozen-lockfile
+        # 의존성의 install 스크립트는 실행하지 않는다. (sass 는 필요 없다)
+        run: yarn install --non-interactive --frozen-lockfile --ignore-scripts
       - name: Test
         # build + 저장소 규칙 점검 + 동작 검증. dist/ 와 docs/guide.html 도 여기서 생성된다.
         if: steps.published.outputs.exists == 'false'

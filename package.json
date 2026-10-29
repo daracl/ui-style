@@ -1,11 +1,11 @@
 {
   "name": "@daracl/ui-style",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Daracl UI shared SCSS: design tokens, themes, mixins and utilities",
   "author": {
     "name": "darainfo",
     "email": "darainfosys@gmail.com",
-    "url": "https://www.moaview.com"
+    "url": "https://ui.daracl.com"
   },
   "license": "MIT",
   "keywords": [
@@ -84,12 +84,14 @@
   },
   "scripts": {
     "clean": "node scripts/clean.mjs",
-    "build": "yarn clean && yarn build:css && yarn build:css:min && yarn build:guide",
+    "build": "node scripts/build.mjs",
     "build:guide": "node scripts/build-guide.mjs",
-    "build:css": "sass --no-source-map --load-path=src src/css/style.scss:dist/style.css src/css/theme-vars.scss:dist/theme-vars.css",
-    "build:css:min": "sass --no-source-map --style=compressed --load-path=src src/css/style.scss:dist/style.min.css src/css/theme-vars.scss:dist/theme-vars.min.css",
+    "build:css": "node scripts/build.mjs --css-only",
+    "build:css:min": "node scripts/build.mjs --min-only",
+    "start": "yarn build && node scripts/serve.mjs --open",
+    "serve": "node scripts/serve.mjs",
     "lint:rules": "node scripts/lint-rules.mjs",
-    "test": "yarn build && yarn lint:rules && node scripts/verify.mjs",
+    "test": "node scripts/build.mjs && node scripts/lint-rules.mjs && node scripts/verify.mjs",
     "prepack": "yarn build"
   },
   "devDependencies": {

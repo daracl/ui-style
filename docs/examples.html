@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@daracl/ui-style 테마 예제</title>
+<!-- dist/theme-vars.css 의 --dui-* 변수만 사용한다. 패널마다 data-daracl-theme 를 달리 지정해 테마를 나란히 비교한다. -->
+<link rel="stylesheet" href="../dist/theme-vars.css">
+<style>
+  /* 이 페이지 전용 스타일 (--dui-* 가 아닌 --ex-* 사용) */
+  :root { --ex-radius: 6px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: #e8eaee; color: #222; }
+  header { padding: 20px 24px 8px; }
+  header h1 { margin: 0 0 4px; font-size: 20px; }
+  header p { margin: 0; color: #555; }
+  .panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; padding: 16px 24px 32px; }
+  .panel { background: var(--dui-body-bg); color: var(--dui-font-color); border: 1px solid var(--dui-border-color); border-radius: 10px; overflow: hidden; box-shadow: var(--dui-page-shadow); }
+  .panel > h2 { margin: 0; padding: 10px 16px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; background: var(--dui-panel-header-bg); border-bottom: 1px solid var(--dui-border-color); color: var(--dui-label-color); }
+  .body { padding: 16px; display: grid; gap: 20px; }
+  .body h3 { margin: 0 0 8px; font-size: 13px; color: var(--dui-muted-color); font-weight: 600; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+  .btn { font: inherit; padding: 6px 14px; border-radius: var(--ex-radius); border: 1px solid var(--dui-button-border-color); background: var(--dui-button-bg); color: var(--dui-font-color); cursor: pointer; }
+  .btn:hover { background: var(--dui-button-hover-bg); color: var(--dui-font-hover-color); }
+  .btn:disabled { background: var(--dui-disabled-bg); color: var(--dui-font-disable-color); cursor: not-allowed; }
+  .btn.primary { background: var(--dui-primary-color); border-color: var(--dui-primary-color); color: var(--dui-primary-font-color); }
+  .btn.primary:hover { background: var(--dui-primary-hover-color); }
+  .btn.danger { background: var(--dui-danger-color); border-color: var(--dui-danger-color); color: #fff; }
+
+  label { display: block; margin-bottom: 4px; color: var(--dui-label-color); }
+  label .req { color: var(--dui-required-color); }
+  input[type=text], select { font: inherit; width: 100%; padding: 6px 10px; border-radius: var(--ex-radius); border: 1px solid var(--dui-input-border-color); background: var(--dui-input-bg); color: var(--dui-input-color); }
+  input[type=text]:hover, select:hover { border-color: var(--dui-input-border-hover-color); }
+  input[type=text]:focus, select:focus { outline: 2px solid var(--dui-primary-color); outline-offset: -1px; }
+  input:disabled { background: var(--dui-input-disabled-bg); color: var(--dui-font-disable-color); }
+  input.invalid { border-color: var(--dui-invalid-border-color); background: var(--dui-invalid-bg); color: var(--dui-invalid-font-color); }
+  .help-error { margin-top: 4px; color: var(--dui-error-color); font-size: 12px; }
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--dui-border-color); }
+  .tabs button { font: inherit; padding: 6px 14px; border: 1px solid transparent; border-bottom: 0; background: var(--dui-tab-bg); color: var(--dui-font-soft-color); cursor: pointer; }
+  .tabs button:hover { background: var(--dui-tab-bg-hover); }
+  .tabs button.on { background: var(--dui-body-bg); color: var(--dui-font-color); border-color: var(--dui-border-color); margin-bottom: -1px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--dui-border-light-color); }
+  th { background: var(--dui-panel-header-bg); color: var(--dui-label-color); font-weight: 600; border-bottom-color: var(--dui-border-color); }
+  tbody tr:hover { background: var(--dui-hover-bg); color: var(--dui-hover-color); }
+  tbody tr.accent:hover { background: var(--dui-hover-accent-bg); color: var(--dui-hover-accent-color); }
+  tbody tr.selected { background: var(--dui-selected-bg); color: var(--dui-selected-color); box-shadow: inset 3px 0 0 var(--dui-selected-border-color); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .alerts { display: grid; gap: 6px; }
+  .alert { padding: 8px 12px; border-radius: var(--ex-radius); border-left: 4px solid; background: var(--dui-body-bg-thin); }
+  .alert.success { border-color: var(--dui-alert-success-color); }
+  .alert.error { border-color: var(--dui-alert-error-color); }
+  .alert.warning { border-color: var(--dui-alert-warning-color); }
+  .alert.info { border-color: var(--dui-alert-info-color); }
+  .alert.err-box { background: var(--dui-error-bg); border-color: var(--dui-error-border-color); color: var(--dui-error-color); }
+
+  .check { display: inline-flex; gap: 6px; align-items: center; color: var(--dui-font-color); margin: 0; }
+  .box { width: 16px; height: 16px; border-radius: 3px; display: inline-grid; place-items: center; font-size: 11px; line-height: 1; color: var(--dui-check-mark-color); background: var(--dui-check-bg); }
+  .box.on { background: var(--dui-check-active-bg); }
+  .box.mid { background: var(--dui-check-indeterminate-bg); }
+
+  .tip { display: inline-block; padding: 4px 8px; border-radius: 4px; background: var(--dui-tooltip-bg); color: var(--dui-tooltip-color); font-size: 12px; }
+  .badge { padding: 2px 8px; border-radius: 10px; background: var(--dui-primary-soft-bg); color: var(--dui-accent-text-color); font-size: 12px; }
+  .card { padding: 12px; border-radius: 8px; background: var(--dui-body-bg-thin); border: 1px solid var(--dui-border-light-color); box-shadow: var(--dui-shadow); }
+  .card a { color: var(--dui-accent-text-color); }
+  .card small { color: var(--dui-muted-color); }
+  .sub { color: var(--dui-font-disable-color); }
+
+  .scroll { height: 70px; overflow: auto; padding: 8px; border: 1px solid var(--dui-border-color); border-radius: var(--ex-radius); background: var(--dui-scroll-bg); color-scheme: inherit; scrollbar-color: var(--dui-scroll-thumb-bg) var(--dui-scroll-track-bg); }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
+  .sw { border: 1px solid var(--dui-border-color); border-radius: 4px; overflow: hidden; font-size: 11px; }
+  .sw i { display: block; height: 28px; }
+  .sw span { display: block; padding: 2px 4px; color: var(--dui-muted-color); word-break: break-all; }
+</style>
+</head>
+<body>
+<header>
+  <h1>테마 예제</h1>
+  <p>같은 마크업에 <code>data-daracl-theme</code> 만 달리한 결과입니다. 색은 모두 <code>dist/theme-vars.css</code> 의 <code>--dui-*</code> 변수입니다. (<code>npm start</code> 후 <code>/docs/examples.html</code>)</p>
+</header>
+
+<main class="panels" id="panels"></main>
+
+<!-- 패널 하나의 마크업. light / dark 패널에 같은 내용을 채운다. -->
+<template id="tpl">
+  <div class="body">
+    <section>
+      <h3>버튼</h3>
+      <div class="row">
+        <button class="btn">기본</button>
+        <button class="btn primary">Primary</button>
+        <button class="btn danger">Danger</button>
+        <button class="btn" disabled>Disabled</button>
+        <span class="badge">badge</span>
+        <span class="tip">tooltip</span>
+      </div>
+    </section>
+
+    <section>
+      <h3>폼</h3>
+      <div class="form">
+        <div><label>이름 <span class="req">*</span></label><input type="text" value="홍길동"></div>
+        <div><label>이메일</label><input type="text" class="invalid" value="not-an-email"><div class="help-error">올바른 이메일이 아닙니다.</div></div>
+        <div><label>부서</label><select><option>개발팀</option><option>디자인팀</option></select></div>
+        <div><label>비활성</label><input type="text" value="수정 불가" disabled></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label class="check"><span class="box on">✓</span>선택</label>
+        <label class="check"><span class="box mid">−</span>일부</label>
+        <label class="check"><span class="box"></span>해제</label>
+      </div>
+    </section>
+
+    <section>
+      <h3>탭 · 테이블 (hover / hover-accent / selected)</h3>
+      <div class="tabs"><button class="on">목록</button><button>설정</button><button>로그</button></div>
+      <table>
+        <thead><tr><th>이름</th><th>상태</th><th class="num">금액</th></tr></thead>
+        <tbody>
+          <tr><td>일반 행 (hover 해 보세요)</td><td>대기</td><td class="num">1,200</td></tr>
+          <tr class="accent"><td>accent hover 행</td><td>진행</td><td class="num">3,400</td></tr>
+          <tr class="selected"><td>선택된 행</td><td>완료</td><td class="num">5,600</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h3>알림</h3>
+      <div class="alerts">
+        <div class="alert success">저장되었습니다.</div>
+        <div class="alert info">새 버전이 있습니다.</div>
+        <div class="alert warning">디스크 용량이 부족합니다.</div>
+        <div class="alert error">요청에 실패했습니다.</div>
+        <div class="alert err-box">입력값 오류 (error-bg / error-border)</div>
+      </div>
+    </section>
+
+    <section>
+      <h3>카드 · 텍스트 · 스크롤</h3>
+      <div class="card">
+        <b>카드 제목</b> <small>muted 보조 글자</small>
+        <p style="margin:6px 0">본문 글자(font-color)와 <a href="#" onclick="return false">링크 색(accent-text)</a>, <span class="sub">비활성 글자</span>.</p>
+      </div>
+      <div class="scroll" style="margin-top:8px">스크롤 영역입니다.<br>줄 1<br>줄 2<br>줄 3<br>줄 4<br>줄 5<br>줄 6</div>
+    </section>
+
+    <section>
+      <h3>이 테마의 --dui-* 색 (<span class="count"></span>)</h3>
+      <div class="swatches"></div>
+    </section>
+  </div>
+</template>
+
+<script>
+(function () {
+  var themes = [
+    { name: 'light', label: 'Light — data-daracl-theme="light"' },
+    { name: 'dark', label: 'Dark — data-daracl-theme="dark"' }
+  ];
+  var root = document.getElementById('panels');
+  var tpl = document.getElementById('tpl');
+
+  themes.forEach(function (t) {
+    var panel = document.createElement('section');
+    panel.className = 'panel';
+    panel.setAttribute('data-daracl-theme', t.name);
+    panel.innerHTML = '<h2></h2>';
+    panel.firstChild.textContent = t.label;
+    panel.appendChild(tpl.content.cloneNode(true));
+    root.appendChild(panel);
+  });
+
+  // 탭 클릭 시 on 표시만 바꾼다
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest('.tabs button');
+    if (!b) return;
+    [].forEach.call(b.parentNode.children, function (x) { x.classList.toggle('on', x === b); });
+  });
+
+  // 패널별 계산된 --dui-* 색을 견본으로 나열 (스타일시트에서 이름을 읽고, 패널에서 값을 읽는다)
+  var names = [];
+  [].forEach.call(document.styleSheets, function (sheet) {
+    var rules; try { rules = sheet.cssRules; } catch (e) { return; }
+    (function walk(list) {
+      [].forEach.call(list, function (r) {
+        if (r.cssRules && !r.style) return walk(r.cssRules);
+        if (!r.style) return;
+        for (var i = 0; i < r.style.length; i++) {
+          var n = r.style[i];
+          if (n.indexOf('--dui-') === 0 && names.indexOf(n) < 0) names.push(n);
+        }
+      });
+    })(rules);
+  });
+  [].forEach.call(root.querySelectorAll('.panel'), function (panel) {
+    var cs = getComputedStyle(panel), box = panel.querySelector('.swatches'), n = 0;
+    names.forEach(function (name) {
+      var v = cs.getPropertyValue(name).trim();
+      if (!/^(#|rgb)/i.test(v)) return;    // 색이 아닌 값(shadow 등)은 제외
+      var d = document.createElement('div'); d.className = 'sw';
+      d.innerHTML = '<i></i><span></span>';
+      d.firstChild.style.background = v;
+      d.lastChild.textContent = name.slice(6) + ' ' + v;
+      box.appendChild(d); n++;
+    });
+    panel.querySelector('.count').textContent = n + '개';
+  });
+})();
+</script>
+</body>
+</html>
